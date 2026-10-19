@@ -1,0 +1,271 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: light;
+  --background: #f9fafb;        /* Soft off-white */
+  --foreground: #1f2933;        /* Soft black / graphite */
+
+  --card: #ffffff;
+  --card-foreground: #1f2933;
+
+  --popover: #ffffff;
+  --popover-foreground: #1f2933;
+
+  --primary: #6b8f71;           /* Muted sage green */
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef1f0;         /* Light grey-green */
+  --secondary-foreground: #374151;
+
+  --muted: #f1f5f9;             /* Subtle grey */
+  --muted-foreground: #6b7280;
+
+  --accent: #8fb3a2;            /* Soft green accent */
+  --accent-foreground: #1f2933;
+
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+
+  --border: #e5e7eb;
+  --input: #ffffff;
+  --ring: #6b8f71;
+
+  --chart-1: #6b8f71;
+  --chart-2: #9ca3af;
+  --chart-3: #4b5563;
+  --chart-4: #d1d5db;
+  --chart-5: #111827;
+
+  --radius: 0.5rem;
+
+  --sidebar: #f3f4f6;
+  --sidebar-foreground: #1f2933;
+  --sidebar-primary: #6b8f71;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e5e7eb;
+  --sidebar-accent-foreground: #1f2933;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #6b8f71;
+}
+
+
+.dark {
+  color-scheme: dark;
+  --background: #0f1115;        /* Soft black */
+  --foreground: #e5e7eb;        /* Light grey text */
+
+  --card: #161a20;
+  --card-foreground: #e5e7eb;
+
+  --popover: #161a20;
+  --popover-foreground: #e5e7eb;
+
+  --primary: #7fa89a;           /* Muted sage */
+  --primary-foreground: #0f1115;
+
+  --secondary: #1f2933;
+  --secondary-foreground: #e5e7eb;
+
+  --muted: #1a1f26;
+  --muted-foreground: #9ca3af;
+
+  --accent: #5f7f73;            /* Deeper sage */
+  --accent-foreground: #e5e7eb;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --border: #2a2f36;
+  --input: #161a20;
+  --ring: #7fa89a;
+
+  --chart-1: #7fa89a;
+  --chart-2: #9ca3af;
+  --chart-3: #6b7280;
+  --chart-4: #374151;
+  --chart-5: #e5e7eb;
+
+  --sidebar: #12161c;
+  --sidebar-foreground: #e5e7eb;
+  --sidebar-primary: #7fa89a;
+  --sidebar-primary-foreground: #0f1115;
+  --sidebar-accent: #1f2933;
+  --sidebar-accent-foreground: #e5e7eb;
+  --sidebar-border: #2a2f36;
+  --sidebar-ring: #7fa89a;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Updated font variables for Space Grotesk and DM Sans */
+  --font-sans: var(--font-space-grotesk);
+  --font-serif: var(--font-dm-sans);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans overflow-x-hidden;
+  }
+
+  /* Terminal-inspired grid pattern with orange accent */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, rgba(234, 88, 12, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Terminal-style code blocks */
+  .terminal-block {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+    border: 1px solid rgba(234, 88, 12, 0.3);
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.1);
+  }
+
+  /* Command line interface styling */
+  .cli-prompt::before {
+    content: "$ ";
+    color: #f97316;
+    font-weight: bold;
+  }
+
+  /* Sidebar animations */
+  .sidebar-enter {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  .sidebar-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 300ms ease-out, opacity 300ms ease-out;
+  }
+
+  /* Terminal cursor animation */
+  .terminal-cursor::after {
+    content: "_";
+    color: #f97316;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Glitch effect for terminal aesthetic */
+  .glitch {
+    position: relative;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    animation: glitch-1 0.5s infinite;
+    color: #f97316;
+    z-index: -1;
+  }
+
+  .glitch::after {
+    animation: glitch-2 0.5s infinite;
+    color: #ea580c;
+    z-index: -2;
+  }
+
+  @keyframes glitch-1 {
+    0%,
+    14%,
+    15%,
+    49%,
+    50%,
+    99%,
+    100% {
+      transform: translate(0);
+    }
+    15%,
+    49% {
+      transform: translate(-2px, -1px);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0%,
+    20%,
+    21%,
+    62%,
+    63%,
+    99%,
+    100% {
+      transform: translate(0);
+    }
+    21%,
+    62% {
+      transform: translate(2px, 1px);
+    }
+  }
+}
