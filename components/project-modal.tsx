@@ -45,8 +45,10 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             <DialogTitle className="text-3xl font-bold font-sans text-primary">{project.title}</DialogTitle>
           </DialogHeader>
 
-          {/* Project Image */}
-          <div className="relative w-full h-72 sm:h-96 bg-muted rounded-xl overflow-hidden">
+          {/* Project Image — aspect ratio matches the actual screenshots
+              (1280x632) so object-cover never has to crop the sides to
+              fill a mismatched fixed-height box. */}
+          <div className="relative w-full aspect-[1280/632] bg-muted rounded-xl overflow-hidden">
             <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
           </div>
 
