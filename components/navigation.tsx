@@ -94,6 +94,27 @@ export function Navigation() {
     }
   }, [isOpen])
 
+  const handleThemeToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const next = resolvedTheme === "dark" ? "light" : "dark"
+
+    // Document with the experimental View Transitions API, which isn't yet
+    // in lib.dom.d.ts for every supported TS target.
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => void
+    }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    if (!doc.startViewTransition || prefersReducedMotion) {
+      setTheme(next)
+      return
+    }
+
+    document.documentElement.style.setProperty("--theme-toggle-x", `${e.clientX}px`)
+    document.documentElement.style.setProperty("--theme-toggle-y", `${e.clientY}px`)
+    doc.startViewTransition(() => setTheme(next))
+  }
+
   return (
     <>
       {/* Mobile Top Bar */}
@@ -240,7 +261,7 @@ export function Navigation() {
                 <Button
                   variant="ghost"
                   className="w-full justify-start group hover:bg-sidebar-accent cursor-pointer hover:text-sidebar-accent-foreground p-3 h-auto"
-                  onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                  onClick={handleThemeToggle}
                   disabled={!mounted}
                 >
                   {mounted && resolvedTheme === "dark" ? (

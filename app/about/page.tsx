@@ -4,12 +4,10 @@ import { Navigation } from "@/components/navigation"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 import {
   Code,
   Terminal,
   User,
-  Activity,
   Coffee,
   BookOpen,
   Target,
@@ -24,30 +22,33 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import {
   FadeIn,
-  SlideInRight,
   StaggerIn,
   TypewriterAnimation,
   StatusIndicator,
 } from "@/components/animations/reveal-animations"
 import { ContactModal } from "@/components/contact-modal"
 
-const profileData = {
-  name: "Software Engineer",
-  role: "Full-Stack Developer",
-  location: "Remote / Global",
-  experience: "3+ Years",
-  projects: "50+",
-  status: "Available",
+type SkillTier = "Expert" | "Proficient" | "Familiar"
+
+const tierStyles: Record<SkillTier, string> = {
+  Expert: "border-green-500/30 text-green-500",
+  Proficient: "border-blue-500/30 text-blue-500",
+  Familiar: "border-muted-foreground/30 text-muted-foreground",
 }
 
-const skillCategories = [
+const skillCategories: {
+  name: string
+  skills: { name: string; tier: SkillTier }[]
+  icon: typeof Monitor
+  color: string
+}[] = [
   {
     name: "Frontend",
     skills: [
-      { name: "React", level: 95 },
-      { name: "TypeScript", level: 92 },
-      { name: "Next.js", level: 90 },
-      { name: "Tailwind CSS", level: 88 },
+      { name: "React", tier: "Expert" },
+      { name: "TypeScript", tier: "Expert" },
+      { name: "Next.js", tier: "Expert" },
+      { name: "Tailwind CSS", tier: "Proficient" },
     ],
     icon: Monitor,
     color: "text-blue-500",
@@ -55,10 +56,10 @@ const skillCategories = [
   {
     name: "Backend",
     skills: [
-      { name: "Node.js", level: 90 },
-      { name: "Python", level: 85 },
-      { name: "API Design", level: 93 },
-      { name: "Microservices", level: 80 },
+      { name: "Node.js", tier: "Expert" },
+      { name: "Python", tier: "Proficient" },
+      { name: "API Design", tier: "Expert" },
+      { name: "Microservices", tier: "Proficient" },
     ],
     icon: Server,
     color: "text-green-500",
@@ -66,10 +67,10 @@ const skillCategories = [
   {
     name: "Database",
     skills: [
-      { name: "PostgreSQL", level: 85 },
-      { name: "MongoDB", level: 82 },
-      { name: "Redis", level: 78 },
-      { name: "SQL Optimization", level: 80 },
+      { name: "PostgreSQL", tier: "Proficient" },
+      { name: "MongoDB", tier: "Proficient" },
+      { name: "Redis", tier: "Familiar" },
+      { name: "SQL Optimization", tier: "Proficient" },
     ],
     icon: Database,
     color: "text-purple-500",
@@ -77,21 +78,14 @@ const skillCategories = [
   {
     name: "DevOps",
     skills: [
-      { name: "Docker", level: 82 },
-      { name: "AWS", level: 80 },
-      { name: "CI/CD", level: 85 },
-      { name: "Kubernetes", level: 75 },
+      { name: "Docker", tier: "Proficient" },
+      { name: "AWS", tier: "Proficient" },
+      { name: "CI/CD", tier: "Proficient" },
+      { name: "Kubernetes", tier: "Familiar" },
     ],
     icon: Globe,
     color: "text-orange-500",
   },
-]
-
-const systemInfo = [
-  { label: "Uptime", value: "99.9%", icon: Activity, color: "text-green-500" },
-  { label: "Response Time", value: "< 100ms", icon: Zap, color: "text-yellow-500" },
-  { label: "Code Quality", value: "A+", icon: Code, color: "text-blue-500" },
-  { label: "Bug Rate", value: "< 0.1%", icon: Target, color: "text-red-500" },
 ]
 
 const achievements = [
@@ -104,7 +98,7 @@ const achievements = [
 const terminalHistory = [
   "$ cat /etc/profile",
   "> Name: Software Engineer",
-  "> Role: Full-Stack Developer",
+  "> Role: Software Engineer (Mid-Level)",
   "> Experience: 3+ years",
   "$ ls skills/",
   "> frontend/ backend/ database/ devops/",
@@ -150,125 +144,55 @@ export default function AboutPage() {
         </FadeIn>
 
         <div className="p-6 space-y-6">
-          {/* Profile Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Profile Terminal */}
-            <div className="lg:col-span-2">
-              <FadeIn>
-                <Card className="terminal-block text-white h-64 md:h-80">
-                  <div className="p-6 h-full flex flex-col">
-                    {/* Terminal Header */}
-                    <div className="flex items-center justify-between mb-4 pb-2 border-b border-primary/20">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex space-x-1">
-                          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        </div>
-                        <span className="text-sm font-mono">profile.sh</span>
-                      </div>
-                      <Badge variant="outline" className="border-primary/30 text-primary">
-                        Interactive
-                      </Badge>
+          {/* Profile Terminal */}
+          <FadeIn>
+            <Card className="terminal-block text-white h-72 md:h-96">
+              <div className="p-6 h-full flex flex-col">
+                {/* Terminal Header */}
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-primary/20">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     </div>
-
-                    {/* Terminal Content */}
-                    <div className="flex-1 font-mono text-sm space-y-2 overflow-hidden">
-                      <div className="space-y-1">
-                        <div className="text-primary">Loading developer profile...</div>
-                        <div className="text-muted-foreground">Initializing personal data...</div>
-                        <div className="h-px bg-primary/20 my-3"></div>
-                      </div>
-
-                      <div className="space-y-1">
-                        {terminalHistory.slice(0, currentLine + 1).map((line, index) => (
-                          <div key={index} className="flex items-start space-x-2">
-                            {line.startsWith("$") ? (
-                              <>
-                                <span className="text-primary">$</span>
-                                <TypewriterAnimation text={line.slice(2)} className="text-white" speed={30} />
-                              </>
-                            ) : (
-                              <div className="text-accent pl-4">{line.slice(2)}</div>
-                            )}
-                          </div>
-                        ))}
-                        <div className="flex items-center space-x-1 mt-4">
-                          <span className="text-primary">$</span>
-                          <span className="terminal-cursor text-white">_</span>
-                        </div>
-                      </div>
-                    </div>
+                    <span className="text-sm font-mono">profile.sh</span>
                   </div>
-                </Card>
-              </FadeIn>
-            </div>
+                  <Badge variant="outline" className="border-primary/30 text-primary">
+                    Interactive
+                  </Badge>
+                </div>
 
-            {/* Profile Stats */}
-            <div className="space-y-4">
-              <SlideInRight>
-                <Card className="p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold flex items-center">
-                      <User className="h-4 w-4 mr-2 text-primary" />
-                      Profile Data
-                    </h3>
+                {/* Terminal Content */}
+                <div className="flex-1 font-mono text-sm space-y-2 overflow-hidden">
+                  <div className="space-y-1">
+                    <div className="text-primary">Loading developer profile...</div>
+                    <div className="text-muted-foreground">Initializing personal data...</div>
+                    <div className="h-px bg-primary/20 my-3"></div>
                   </div>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Name:</span>
-                      <span className="font-mono">{profileData.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Role:</span>
-                      <span className="font-mono">{profileData.role}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Location:</span>
-                      <span className="font-mono">{profileData.location}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Experience:</span>
-                      <span className="font-mono text-primary">{profileData.experience}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Projects:</span>
-                      <span className="font-mono text-primary">{profileData.projects}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status:</span>
-                      <Badge variant="outline" className="text-xs">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></div>
-                        {profileData.status}
-                      </Badge>
-                    </div>
-                  </div>
-                </Card>
-              </SlideInRight>
 
-              <SlideInRight delay={0.2}>
-                <Card className="p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold flex items-center">
-                      <Activity className="h-4 w-4 mr-2 text-primary" />
-                      System Health
-                    </h3>
-                  </div>
-                  <div className="space-y-3">
-                    {systemInfo.map((info, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <info.icon className={`h-3 w-3 ${info.color}`} />
-                          <span className="text-sm">{info.label}</span>
-                        </div>
-                        <span className={`text-sm font-mono ${info.color}`}>{info.value}</span>
+                  <div className="space-y-1">
+                    {terminalHistory.slice(0, currentLine + 1).map((line, index) => (
+                      <div key={index} className="flex items-start space-x-2">
+                        {line.startsWith("$") ? (
+                          <>
+                            <span className="text-primary">$</span>
+                            <TypewriterAnimation text={line.slice(2)} className="text-white" speed={30} />
+                          </>
+                        ) : (
+                          <div className="text-accent pl-4">{line.slice(2)}</div>
+                        )}
                       </div>
                     ))}
+                    <div className="flex items-center space-x-1 mt-4">
+                      <span className="text-primary">$</span>
+                      <span className="terminal-cursor text-white">_</span>
+                    </div>
                   </div>
-                </Card>
-              </SlideInRight>
-            </div>
-          </div>
+                </div>
+              </div>
+            </Card>
+          </FadeIn>
 
           {/* Skills Matrix */}
           <FadeIn delay={0.3}>
@@ -288,14 +212,13 @@ export default function AboutPage() {
                       <category.icon className={`h-4 w-4 ${category.color}`} />
                       <h3 className="font-medium">{category.name}</h3>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {category.skills.map((skill, skillIndex) => (
-                        <div key={skillIndex} className="space-y-1">
-                          <div className="flex justify-between text-sm">
-                            <span>{skill.name}</span>
-                            <span className="text-primary font-mono">{skill.level}%</span>
-                          </div>
-                          <Progress value={skill.level} className="h-1.5" />
+                        <div key={skillIndex} className="flex items-center justify-between">
+                          <span className="text-sm">{skill.name}</span>
+                          <Badge variant="outline" className={`text-xs ${tierStyles[skill.tier]}`}>
+                            {skill.tier}
+                          </Badge>
                         </div>
                       ))}
                     </div>
@@ -326,8 +249,8 @@ export default function AboutPage() {
 
           {/* Philosophy Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <FadeIn delay={0.4}>
-              <Card className="p-6">
+            <FadeIn delay={0.4} className="h-full">
+              <Card className="p-6 h-full flex flex-col">
                 <div className="flex items-center space-x-2 mb-4">
                   <BookOpen className="h-5 w-5 text-primary" />
                   <h2 className="text-xl font-semibold">Development Philosophy</h2>
@@ -351,8 +274,8 @@ export default function AboutPage() {
               </Card>
             </FadeIn>
 
-            <FadeIn delay={0.5}>
-              <Card className="p-6">
+            <FadeIn delay={0.5} className="h-full">
+              <Card className="p-6 h-full flex flex-col">
                 <div className="flex items-center space-x-2 mb-4">
                   <Coffee className="h-5 w-5 text-primary" />
                   <h2 className="text-xl font-semibold">Beyond the Code</h2>

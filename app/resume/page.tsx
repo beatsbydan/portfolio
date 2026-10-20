@@ -27,6 +27,7 @@ import {
   ExternalLink,
 } from "lucide-react"
 import { useState } from "react"
+import Image from "next/image"
 import { FadeIn, SlideInRight, StaggerIn, StatusIndicator } from "@/components/animations/reveal-animations"
 
 const personalInfo = {
@@ -221,8 +222,8 @@ export default function ResumePage() {
                 <FadeIn>
                   <Card className="p-6">
                     <div className="flex items-center space-x-4 mb-6">
-                      <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
-                        <User className="h-8 w-8 text-primary" />
+                      <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-xl border border-primary/20">
+                        <Image src="/daniel.jpg" alt="Daniel Onyeachonam" fill className="object-cover" />
                       </div>
                       <div>
                         <h1 className="text-2xl font-bold">{personalInfo.name}</h1>

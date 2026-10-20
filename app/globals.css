@@ -269,3 +269,24 @@
     }
   }
 }
+
+/* Theme toggle: circular reveal via the View Transitions API, expanding
+   from the click point (--theme-toggle-x/y, set in navigation.tsx).
+   Guarded in JS by feature-detection + prefers-reduced-motion, so this
+   only ever runs where it's supported and wanted. */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: theme-reveal 0.5s ease-in-out;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0% at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+}

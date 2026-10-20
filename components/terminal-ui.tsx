@@ -18,6 +18,12 @@ const navigationCommands: Record<string, { path: string; label: string }> = {
   "ls projects/": { path: "/portfolio", label: "portfolio" },
 }
 
+// Commands that open an external link in a new tab
+const externalCommands: Record<string, { url: string; label: string }> = {
+  "open github": { url: "https://github.com/beatsbydan", label: "GitHub" },
+  "open linkedin": { url: "https://www.linkedin.com/in/daniel-onyeachonam/", label: "LinkedIn" },
+}
+
 // Command responses mapping
 const commandResponses: Record<string, string | string[]> = {
   "whoami": "Daniel Onyeachonam, a Software Engineer, lover of chicken & chips!",
@@ -36,6 +42,12 @@ const commandResponses: Record<string, string | string[]> = {
     "  cat about.md     - Go to the about page.",
     "  less resume.pdf  - Go to the resume page.",
     "  ls projects/     - Go to the portfolio page.",
+    "",
+    "LINKS:",
+    "  open github      - Open my GitHub in a new tab.",
+    "  open linkedin    - Open my LinkedIn in a new tab.",
+    "",
+    "Tip: press Tab to autocomplete, ↑/↓ to cycle command history.",
   ],
   "skills": [
     "Frontend: React, Next.js, TypeScript, HTML/CSS, React Native.",
@@ -59,14 +71,32 @@ const commandResponses: Record<string, string | string[]> = {
   ]
 }
 
-const defaultTerminalHistory:TerminalLine[] = [
-    { type: 'output', content: 'Welcome to Daniel\'s Portfolio Terminal!', timestamp: Date.now() },
-    { type: 'output', content: 'Type "help" to see available commands.', timestamp: Date.now() + 1 },
-    { type: 'output', content: '─────────────────────────────────────────', timestamp: Date.now() + 2 }
-  ]
+// All commands that are valid completion/suggestion targets
+const allCommands = [
+  ...Object.keys(commandResponses),
+  ...Object.keys(navigationCommands),
+  ...Object.keys(externalCommands),
+  "clear",
+]
+
+// Quick-tap commands for touch devices, where the input never autofocuses
+const quickCommands = ["whoami", "skills", "contact", "help"]
+
+const bootSequence = [
+  "Booting daniel-os v1.0.0...",
+  "[OK] Loading modules: react, next, typescript",
+  "[OK] Mounting /projects",
+  "[OK] Establishing secure connection",
+]
+
+const welcomeLines: TerminalLine[] = [
+  { type: 'output', content: 'Welcome to Daniel\'s Portfolio Terminal!', timestamp: Date.now() },
+  { type: 'output', content: 'Type "help" to see available commands.', timestamp: Date.now() + 1 },
+  { type: 'output', content: '─────────────────────────────────────────', timestamp: Date.now() + 2 }
+]
 
 interface TerminalLine {
-  type: 'command' | 'output' | 'error'
+  type: 'command' | 'output' | 'error' | 'boot'
   content: string
   timestamp: number
 }
@@ -75,10 +105,11 @@ interface InteractiveTerminalProps {
   }
 
 const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = true}) => {
-  const [history, setHistory] = useState<TerminalLine[]>(defaultTerminalHistory)
+  const [history, setHistory] = useState<TerminalLine[]>([])
   const [input, setInput] = useState('')
   const [commandHistory, setCommandHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const scrollableRef = useRef<OverlayScrollbarsComponentRef>(null)
   const router = useRouter()
@@ -102,14 +133,44 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
   // on touch devices this would pop the keyboard and scroll the page the
   // instant the homepage loads, before the user has interacted with anything.
   useEffect(() => {
-    if (window.matchMedia("(pointer: fine)").matches) {
+    const isPrecisePointer = window.matchMedia("(pointer: fine)").matches
+    setIsTouchDevice(!isPrecisePointer)
+    if (isPrecisePointer) {
       inputRef.current?.focus()
     }
   }, [])
 
+  // Boot sequence: stagger a few system-log lines in before the welcome
+  // message, then it settles into the normal prompt.
+  useEffect(() => {
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+
+    bootSequence.forEach((line, i) => {
+      timeouts.push(
+        setTimeout(() => {
+          setHistory((prev) => [...prev, { type: 'boot', content: line, timestamp: Date.now() + i }])
+        }, i * 180)
+      )
+    })
+
+    timeouts.push(
+      setTimeout(() => {
+        setHistory((prev) => [...prev, ...welcomeLines])
+      }, bootSequence.length * 180 + 150)
+    )
+
+    return () => timeouts.forEach(clearTimeout)
+  }, [])
+
+  const trimmedInput = input.trim().toLowerCase()
+  const suggestion =
+    trimmedInput.length > 0
+      ? allCommands.find((c) => c !== trimmedInput && c.startsWith(trimmedInput))
+      : undefined
+
   const handleCommand = (cmd: string) => {
     const trimmedCmd = cmd.trim().toLowerCase()
-    
+
     if (!trimmedCmd) return
 
     // Add command to history
@@ -120,7 +181,7 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
 
     // Handle clear command
     if (trimmedCmd === 'clear') {
-      setHistory(defaultTerminalHistory)
+      setHistory(welcomeLines)
       setInput('')
       setCommandHistory([...commandHistory, cmd])
       return
@@ -142,9 +203,25 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
       return
     }
 
+    // Handle external link commands
+    const externalLink = externalCommands[trimmedCmd]
+    if (externalLink) {
+      newHistory.push({
+        type: 'output',
+        content: `Opening ${externalLink.label} in a new tab...`,
+        timestamp: Date.now()
+      })
+      setHistory(newHistory)
+      setCommandHistory([...commandHistory, cmd])
+      setHistoryIndex(-1)
+      setInput('')
+      window.open(externalLink.url, '_blank', 'noopener,noreferrer')
+      return
+    }
+
     // Process command
     const response = commandResponses[trimmedCmd]
-    
+
     if (response) {
       if (Array.isArray(response)) {
         response.forEach((line, index) => {
@@ -178,11 +255,16 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleCommand(input)
+    } else if (e.key === 'Tab') {
+      e.preventDefault()
+      if (suggestion) {
+        setInput(suggestion)
+      }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       if (commandHistory.length > 0) {
-        const newIndex = historyIndex === -1 
-          ? commandHistory.length - 1 
+        const newIndex = historyIndex === -1
+          ? commandHistory.length - 1
           : Math.max(0, historyIndex - 1)
         setHistoryIndex(newIndex)
         setInput(commandHistory[newIndex])
@@ -203,7 +285,7 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
   }
 
   return (
-    <div className="h-full text-white">
+    <div className="h-full text-white flex flex-col">
       <Scrollable ref={scrollableRef}>
         {/* Terminal Output */}
         <div
@@ -219,6 +301,8 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
                 </div>
               ) : line.type === 'error' ? (
                 <div className="text-red-400 pl-4">{line.content}</div>
+              ) : line.type === 'boot' ? (
+                <div className="text-white/40">{line.content}</div>
               ) : (
                 <div className="text-green-400 pl-4">{line.content}</div>
               )}
@@ -228,19 +312,41 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
           {/* Input Line */}
           <div className="flex items-start space-x-2 pt-2">
             <span className="text-orange-500 shrink-0">$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent outline-none text-white caret-orange-500"
-              spellCheck={false}
-              autoComplete="off"
-            />
+            <div className="relative flex-1">
+              <div aria-hidden className="pointer-events-none absolute inset-0 whitespace-pre">
+                <span className="invisible">{input}</span>
+                <span className="text-white/30">{suggestion ? suggestion.slice(trimmedInput.length) : ''}</span>
+              </div>
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="relative w-full bg-transparent outline-none text-white caret-orange-500"
+                spellCheck={false}
+                autoComplete="off"
+              />
+            </div>
           </div>
         </div>
       </Scrollable>
+
+      {/* Quick-tap commands — the input never autofocuses on touch devices,
+          so this is the discovery path for mobile visitors. */}
+      {isTouchDevice && (
+        <div className="flex gap-2 overflow-x-auto p-2 border-t border-primary/20 no-scrollbar">
+          {quickCommands.map((cmd) => (
+            <button
+              key={cmd}
+              onClick={() => handleCommand(cmd)}
+              className="shrink-0 rounded-full border border-primary/30 px-3 py-1 text-xs text-primary/90 active:bg-primary/20"
+            >
+              {cmd}
+            </button>
+          ))}
+        </div>
+      )}
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
