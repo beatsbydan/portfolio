@@ -46,24 +46,28 @@ const techCategories: {
   familiar?: string[]
   icon: typeof Code
   color: string
+  borderColor: string
 }[] = [
   {
     name: "Frontend",
     skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     icon: Code,
     color: "text-blue-500",
+    borderColor: "border-t-blue-500",
   },
   {
     name: "Backend",
     skills: ["Node.js", "Express", "Spring Boot"],
     icon: Server,
     color: "text-green-500",
+    borderColor: "border-t-green-500",
   },
   {
     name: "Database",
     skills: ["SQL", "Redis"],
     icon: Database,
     color: "text-purple-500",
+    borderColor: "border-t-purple-500",
   },
   {
     name: "DevOps",
@@ -71,6 +75,7 @@ const techCategories: {
     familiar: ["AWS", "GCP"],
     icon: Globe,
     color: "text-orange-500",
+    borderColor: "border-t-orange-500",
   },
 ]
 
@@ -139,27 +144,28 @@ const workHistory = [
   },
 ]
 
-const projects = [
+const projects: {
+  name: string
+  type: string
+  status: string
+  tech: string[]
+  liveUrl: string
+  metrics?: Record<string, string>
+}[] = [
   {
-    name: "E-Commerce Platform",
-    type: "Full-Stack Application",
-    status: "Production",
-    tech: ["Next.js", "PostgreSQL", "Stripe", "AWS"],
-    metrics: { users: "10k+", uptime: "99.9%", performance: "A+" },
+    name: "Farm Zone",
+    type: "Livestock E-Commerce Platform",
+    status: "Live",
+    tech: ["React", "Vite", "REST API", "Paystack"],
+    liveUrl: "https://farmzone.africa",
+    metrics: { orders: "15,000+", livestock: "50,000+", states: "37" },
   },
   {
-    name: "Task Management API",
-    type: "Backend Service",
-    status: "Production",
-    tech: ["Node.js", "MongoDB", "WebSocket", "Docker"],
-    metrics: { requests: "1M+", latency: "<100ms", coverage: "95%" },
-  },
-  {
-    name: "Component Library",
-    type: "Open Source",
-    status: "Active",
-    tech: ["React", "TypeScript", "Storybook", "npm"],
-    metrics: { downloads: "5k+", stars: "200+", contributors: "15" },
+    name: "MetricLeap",
+    type: "AI-Powered M&E SaaS",
+    status: "Live",
+    tech: ["Next.js", "Supabase", "Radix UI"],
+    liveUrl: "https://v0-metric-leap-design.vercel.app/",
   },
 ]
 
@@ -399,15 +405,18 @@ export default function ResumePage() {
 
                   <div
                     className={cn(
-                      "grid grid-cols-1 gap-6",
+                      "grid grid-cols-1 gap-4",
                       certifications.length === 0 && "sm:grid-cols-2",
                     )}
                   >
                     {techCategories.map((category, index) => (
-                      <div key={index} className="space-y-3">
+                      <div
+                        key={index}
+                        className={`rounded-lg border border-t-4 bg-muted/10 p-5 space-y-3 ${category.borderColor}`}
+                      >
                         <div className="flex items-center space-x-2">
                           <category.icon className={`h-4 w-4 ${category.color}`} />
-                          <span className="font-medium">{category.name}</span>
+                          <span className="font-semibold">{category.name}</span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {category.skills.map((skill, skillIndex) => (
@@ -457,29 +466,31 @@ export default function ResumePage() {
           {/* Projects Section */}
           {activeSection === "projects" && (
             <StaggerIn staggerDelay={0.1}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projects.map((project, index) => (
                   <Card key={index} className="p-4 hover:shadow-lg transition-all duration-300 hover:border-primary/40">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="font-semibold">{project.name}</h3>
-                        <Badge variant={project.status === "Production" ? "default" : "outline"} className="text-xs">
+                        <Badge variant={project.status === "Live" ? "default" : "outline"} className="text-xs">
                           {project.status}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">{project.type}</p>
 
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-medium text-muted-foreground uppercase">Metrics</h4>
-                        <div className="grid grid-cols-3 gap-2 text-xs">
-                          {Object.entries(project.metrics).map(([key, value]) => (
-                            <div key={key} className="text-center">
-                              <div className="font-mono text-primary">{value}</div>
-                              <div className="text-muted-foreground capitalize">{key}</div>
-                            </div>
-                          ))}
+                      {project.metrics && (
+                        <div className="space-y-2">
+                          <h4 className="text-xs font-medium text-muted-foreground uppercase">Metrics</h4>
+                          <div className="grid grid-cols-3 gap-2 text-xs">
+                            {Object.entries(project.metrics).map(([key, value]) => (
+                              <div key={key} className="text-center">
+                                <div className="font-mono text-primary">{value}</div>
+                                <div className="text-muted-foreground capitalize">{key}</div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       <div className="flex flex-wrap gap-1">
                         {project.tech.map((tech, techIndex) => (
@@ -488,6 +499,16 @@ export default function ResumePage() {
                           </Badge>
                         ))}
                       </div>
+
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        View Live
+                      </a>
                     </div>
                   </Card>
                 ))}

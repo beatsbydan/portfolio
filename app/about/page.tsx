@@ -34,24 +34,28 @@ const skillCategories: {
   familiar?: string[]
   icon: typeof Monitor
   color: string
+  borderColor: string
 }[] = [
   {
     name: "Frontend",
     skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     icon: Monitor,
     color: "text-blue-500",
+    borderColor: "border-t-blue-500",
   },
   {
     name: "Backend",
     skills: ["Node.js", "Express", "Spring Boot"],
     icon: Server,
     color: "text-green-500",
+    borderColor: "border-t-green-500",
   },
   {
     name: "Database",
     skills: ["SQL", "Redis"],
     icon: Database,
     color: "text-purple-500",
+    borderColor: "border-t-purple-500",
   },
   {
     name: "DevOps",
@@ -59,6 +63,7 @@ const skillCategories: {
     familiar: ["AWS", "GCP"],
     icon: Globe,
     color: "text-orange-500",
+    borderColor: "border-t-orange-500",
   },
 ]
 
@@ -177,12 +182,15 @@ export default function AboutPage() {
                 <Badge variant="outline">Live Data</Badge>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {skillCategories.map((category, categoryIndex) => (
-                  <div key={categoryIndex} className="space-y-4">
-                    <div className="flex items-center space-x-2 pb-2 border-b border-border">
-                      <category.icon className={`h-4 w-4 ${category.color}`} />
-                      <h3 className="font-medium">{category.name}</h3>
+                  <div
+                    key={categoryIndex}
+                    className={`rounded-lg border border-t-4 bg-muted/10 p-5 space-y-4 ${category.borderColor}`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <category.icon className={`h-5 w-5 ${category.color}`} />
+                      <h3 className="font-semibold">{category.name}</h3>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {category.skills.map((skill) => (
