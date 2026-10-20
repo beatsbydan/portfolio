@@ -4,7 +4,7 @@ import { Navigation } from "@/components/navigation"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
+import { cn } from "@/lib/utils"
 import {
   Download,
   FileText,
@@ -40,36 +40,50 @@ const personalInfo = {
   linkedin: "linkedin.com/in/yourprofile",
 }
 
-const techCategories = [
+const techCategories: {
+  name: string
+  skills: string[]
+  familiar?: string[]
+  icon: typeof Code
+  color: string
+}[] = [
   {
     name: "Frontend",
-    skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Vue.js"],
-    proficiency: 95,
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     icon: Code,
     color: "text-blue-500",
   },
   {
     name: "Backend",
-    skills: ["Node.js", "Python", "Express", "FastAPI", "GraphQL"],
-    proficiency: 90,
+    skills: ["Node.js", "Express", "Spring Boot"],
     icon: Server,
     color: "text-green-500",
   },
   {
     name: "Database",
-    skills: ["PostgreSQL", "MongoDB", "Redis", "MySQL", "Prisma"],
-    proficiency: 85,
+    skills: ["SQL", "Redis"],
     icon: Database,
     color: "text-purple-500",
   },
   {
     name: "DevOps",
-    skills: ["Docker", "AWS", "CI/CD", "Kubernetes", "Terraform"],
-    proficiency: 80,
+    skills: ["Docker", "Kubernetes", "CI/CD"],
+    familiar: ["AWS", "GCP"],
     icon: Globe,
     color: "text-orange-500",
   },
 ]
+
+interface Certification {
+  title: string
+  issuer: string
+  date: string
+  description?: string
+}
+
+// None yet — the Certifications card and layout below adapt automatically
+// once this is populated.
+const certifications: Certification[] = []
 
 const workHistory = [
   {
@@ -202,7 +216,7 @@ export default function ResumePage() {
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
-                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${
                   activeSection === section.id
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -375,7 +389,7 @@ export default function ResumePage() {
 
           {/* Skills Section */}
           {activeSection === "skills" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={cn("grid grid-cols-1 gap-6", certifications.length > 0 && "md:grid-cols-2")}>
               <FadeIn>
                 <Card className="p-6">
                   <div className="flex items-center space-x-2 mb-6">
@@ -383,62 +397,60 @@ export default function ResumePage() {
                     <h2 className="text-xl font-semibold">Technical Proficiency</h2>
                   </div>
 
-                  <div className="space-y-6">
+                  <div
+                    className={cn(
+                      "grid grid-cols-1 gap-6",
+                      certifications.length === 0 && "sm:grid-cols-2",
+                    )}
+                  >
                     {techCategories.map((category, index) => (
                       <div key={index} className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <category.icon className={`h-4 w-4 ${category.color}`} />
-                            <span className="font-medium">{category.name}</span>
-                          </div>
-                          <span className="text-sm text-primary font-mono">{category.proficiency}%</span>
+                        <div className="flex items-center space-x-2">
+                          <category.icon className={`h-4 w-4 ${category.color}`} />
+                          <span className="font-medium">{category.name}</span>
                         </div>
-                        <Progress value={category.proficiency} className="h-2" />
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1.5">
                           {category.skills.map((skill, skillIndex) => (
                             <Badge key={skillIndex} variant="outline" className="text-xs">
                               {skill}
                             </Badge>
                           ))}
                         </div>
+                        {category.familiar && (
+                          <p className="text-xs text-muted-foreground">
+                            Familiar: {category.familiar.join(", ")}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
                 </Card>
               </FadeIn>
 
-              <FadeIn delay={0.2}>
-                <Card className="p-6">
-                  <div className="flex items-center space-x-2 mb-6">
-                    <Award className="h-5 w-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Achievements</h2>
-                  </div>
+              {certifications.length > 0 && (
+                <FadeIn delay={0.2}>
+                  <Card className="p-6">
+                    <div className="flex items-center space-x-2 mb-6">
+                      <Award className="h-5 w-5 text-primary" />
+                      <h2 className="text-xl font-semibold">Certifications</h2>
+                    </div>
 
-                  <div className="space-y-4">
-                    <div className="p-4 bg-muted/20 rounded-lg">
-                      <h4 className="font-medium">Outstanding Developer Award</h4>
-                      <p className="text-sm text-muted-foreground">Tech Solutions Inc. • 2023</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-serif">
-                        Recognition for exceptional code quality and team leadership
-                      </p>
+                    <div className="space-y-4">
+                      {certifications.map((cert, index) => (
+                        <div key={index} className="p-4 bg-muted/20 rounded-lg">
+                          <h4 className="font-medium">{cert.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {cert.issuer} • {cert.date}
+                          </p>
+                          {cert.description && (
+                            <p className="text-xs text-muted-foreground mt-1 font-serif">{cert.description}</p>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <div className="p-4 bg-muted/20 rounded-lg">
-                      <h4 className="font-medium">Hackathon Winner</h4>
-                      <p className="text-sm text-muted-foreground">Regional Tech Meetup • 2022</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-serif">
-                        First place for innovative web application
-                      </p>
-                    </div>
-                    <div className="p-4 bg-muted/20 rounded-lg">
-                      <h4 className="font-medium">Dean&apos;s List</h4>
-                      <p className="text-sm text-muted-foreground">University CS Department • 2020</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-serif">
-                        Academic excellence in Computer Science
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </FadeIn>
+                  </Card>
+                </FadeIn>
+              )}
             </div>
           )}
 

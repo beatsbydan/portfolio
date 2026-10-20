@@ -28,61 +28,35 @@ import {
 } from "@/components/animations/reveal-animations"
 import { ContactModal } from "@/components/contact-modal"
 
-type SkillTier = "Expert" | "Proficient" | "Familiar"
-
-const tierStyles: Record<SkillTier, string> = {
-  Expert: "border-green-500/30 text-green-500",
-  Proficient: "border-blue-500/30 text-blue-500",
-  Familiar: "border-muted-foreground/30 text-muted-foreground",
-}
-
 const skillCategories: {
   name: string
-  skills: { name: string; tier: SkillTier }[]
+  skills: string[]
+  familiar?: string[]
   icon: typeof Monitor
   color: string
 }[] = [
   {
     name: "Frontend",
-    skills: [
-      { name: "React", tier: "Expert" },
-      { name: "TypeScript", tier: "Expert" },
-      { name: "Next.js", tier: "Expert" },
-      { name: "Tailwind CSS", tier: "Proficient" },
-    ],
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     icon: Monitor,
     color: "text-blue-500",
   },
   {
     name: "Backend",
-    skills: [
-      { name: "Node.js", tier: "Expert" },
-      { name: "Python", tier: "Proficient" },
-      { name: "API Design", tier: "Expert" },
-      { name: "Microservices", tier: "Proficient" },
-    ],
+    skills: ["Node.js", "Express", "Spring Boot"],
     icon: Server,
     color: "text-green-500",
   },
   {
     name: "Database",
-    skills: [
-      { name: "PostgreSQL", tier: "Proficient" },
-      { name: "MongoDB", tier: "Proficient" },
-      { name: "Redis", tier: "Familiar" },
-      { name: "SQL Optimization", tier: "Proficient" },
-    ],
+    skills: ["SQL", "Redis"],
     icon: Database,
     color: "text-purple-500",
   },
   {
     name: "DevOps",
-    skills: [
-      { name: "Docker", tier: "Proficient" },
-      { name: "AWS", tier: "Proficient" },
-      { name: "CI/CD", tier: "Proficient" },
-      { name: "Kubernetes", tier: "Familiar" },
-    ],
+    skills: ["Docker", "Kubernetes", "CI/CD"],
+    familiar: ["AWS", "GCP"],
     icon: Globe,
     color: "text-orange-500",
   },
@@ -97,15 +71,13 @@ const achievements = [
 
 const terminalHistory = [
   "$ cat /etc/profile",
-  "> Name: Software Engineer",
+  "> Name: Daniel Onyeachonam",
   "> Role: Software Engineer (Mid-Level)",
-  "> Experience: 3+ years",
+  "> Experience: 3+ years, full-stack web development",
   "$ ls skills/",
   "> frontend/ backend/ database/ devops/",
-  "$ git log --oneline",
-  "> feat: optimized performance",
-  "> fix: resolved edge cases",
-  "> docs: updated documentation",
+  "$ cat status.txt",
+  "> Open to new opportunities — let's build something.",
 ]
 
 export default function AboutPage() {
@@ -147,7 +119,7 @@ export default function AboutPage() {
           {/* Profile Terminal */}
           <FadeIn>
             <Card className="terminal-block text-white h-72 md:h-96">
-              <div className="p-6 h-full flex flex-col">
+              <div className="px-6 h-full flex flex-col">
                 {/* Terminal Header */}
                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-primary/20">
                   <div className="flex items-center space-x-2">
@@ -212,16 +184,18 @@ export default function AboutPage() {
                       <category.icon className={`h-4 w-4 ${category.color}`} />
                       <h3 className="font-medium">{category.name}</h3>
                     </div>
-                    <div className="space-y-2">
-                      {category.skills.map((skill, skillIndex) => (
-                        <div key={skillIndex} className="flex items-center justify-between">
-                          <span className="text-sm">{skill.name}</span>
-                          <Badge variant="outline" className={`text-xs ${tierStyles[skill.tier]}`}>
-                            {skill.tier}
-                          </Badge>
-                        </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {category.skills.map((skill) => (
+                        <Badge key={skill} variant="outline" className="text-xs">
+                          {skill}
+                        </Badge>
                       ))}
                     </div>
+                    {category.familiar && (
+                      <p className="text-xs text-muted-foreground">
+                        Familiar: {category.familiar.join(", ")}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -286,14 +260,13 @@ export default function AboutPage() {
                     projects, or sharing knowledge with the developer community.
                   </p>
                   <p>
-                    I&apos;m passionate about mentoring junior developers and believe that the best way to grow is by helping
-                    others grow alongside you.
+                    Off the clock, I&apos;m usually out playing soccer, deep into a video game, or discovering new music.
                   </p>
                   <div className="flex flex-wrap gap-2 mt-4">
                     <Badge variant="outline">Open Source</Badge>
-                    <Badge variant="outline">Mentoring</Badge>
-                    <Badge variant="outline">Tech Writing</Badge>
-                    <Badge variant="outline">Community</Badge>
+                    <Badge variant="outline">Soccer</Badge>
+                    <Badge variant="outline">Gaming</Badge>
+                    <Badge variant="outline">Music</Badge>
                   </div>
                 </div>
               </Card>

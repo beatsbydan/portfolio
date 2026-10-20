@@ -74,240 +74,81 @@ export default function PortfolioPage() {
     { id: "opensource", label: "Open Source", icon: Github },
   ]
 
+  const categoryIcons: Record<string, typeof Code> = {
+    "Web Applications": Globe,
+    "APIs & Backend": Server,
+    "Full-Stack Projects": Code,
+    "Open Source": Github,
+  }
+
   const projects: Project[] = [
     {
       id: "1",
-      title: "E-Commerce Platform",
+      title: "Farm Zone",
       description:
-        "Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.",
+        "Nigeria's leading livestock marketplace — premium Halal rams, goats, cows and camels, with nationwide delivery, processing and grilling services.",
       longDescription:
-        "A comprehensive e-commerce platform built with modern web technologies, featuring secure payment processing, real-time inventory management, and a powerful admin dashboard. The application handles thousands of products and provides a seamless shopping experience across all devices.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Tailwind CSS", "Prisma"],
+        "Farm Zone is a full e-commerce platform for Nigeria's livestock market, connecting individual and corporate buyers with Halal-certified rams, goats, cows and camels. Buyers choose between a retail flow for personal and Eid purchases or a bulk/corporate flow for events and volume orders, browse live pricing by animal size, and check out with Paystack or Google Sign-In. Beyond the sale, Farm Zone coordinates professional slaughter and meat processing, event grilling services, and nationwide delivery — for a business that has supplied 50,000+ animals and fulfilled 15,000+ orders across all 37 states.",
+      image: "/projects/farmzone.jpg",
+      technologies: ["React", "Vite", "REST API", "Paystack", "Google Sign-In"],
       category: "Full-Stack Projects",
-      year: "2024",
+      year: "2025",
       status: "Live",
       features: [
-        "Secure user authentication and authorization",
-        "Real-time inventory tracking and management",
-        "Integrated Stripe payment processing",
-        "Responsive design optimized for all devices",
-        "Advanced search and filtering capabilities",
-        "Admin dashboard with analytics and reporting",
+        "Dual shopping flows — individual retail purchases vs. corporate/bulk ordering with volume pricing",
+        "Live product catalog with per-animal, per-size pricing across rams, goats, cows and camels",
+        "Google Sign-In and Paystack-powered checkout",
+        "Custom versioned REST API built from scratch to power the storefront",
+        "Nationwide delivery coordination plus meat processing and event grilling add-on services",
+        "Installable PWA with light/dark mode and WhatsApp-based support",
       ],
       challenges: [
-        "Implementing secure payment processing with Stripe webhooks",
-        "Optimizing database queries for large product catalogs",
-        "Building real-time inventory updates across multiple users",
-        "Ensuring PCI compliance for payment data handling",
+        "Modeling livestock as a product catalog with per-animal, per-size pricing instead of the flat SKUs typical e-commerce platforms assume",
+        "Designing and versioning a REST API from scratch to serve both the retail and bulk/corporate ordering flows",
+        "Integrating Paystack for Nigerian payment rails alongside Google Sign-In for account access",
+        "Splitting the UX cleanly between individual retail buyers and corporate/bulk buyers without duplicating the entire storefront",
       ],
       results: [
-        "Successfully processing 1000+ transactions monthly",
-        "99.9% uptime with optimized performance",
-        "Reduced page load times by 40% through optimization",
-        "Increased conversion rate by 25% with improved UX",
+        "Live platform behind a business reporting 15,000+ orders fulfilled and 50,000+ livestock supplied",
+        "Nationwide reach across all 37 states Farm Zone serves",
+        "Built and shipped solo, covering both the frontend UI and the backend API",
       ],
-      githubUrl: "https://github.com/yourusername/ecommerce-platform",
-      liveUrl: "https://your-ecommerce-demo.com",
+      liveUrl: "https://farmzone.africa",
       metrics: {
-        users: "5,000+ active users",
-        performance: "< 2s page load time",
-        impact: "25% conversion increase",
+        users: "15,000+ orders fulfilled",
+        performance: "Nationwide, 37 states",
+        impact: "50,000+ livestock supplied",
       },
     },
     {
       id: "2",
-      title: "Task Management API",
-      description: "RESTful API with real-time updates, authentication, and comprehensive documentation.",
+      title: "MetricLeap",
+      description:
+        "AI-powered monitoring & evaluation platform helping impact-driven organizations measure, track, and report their social impact.",
       longDescription:
-        "A robust task management API built with Node.js and Express, featuring JWT authentication, real-time WebSocket connections, and comprehensive API documentation. The system supports team collaboration, project management, and automated workflows.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["Node.js", "Express", "MongoDB", "Socket.io", "JWT", "Swagger"],
-      category: "APIs & Backend",
-      year: "2024",
-      status: "Live",
-      features: [
-        "RESTful API design with comprehensive endpoints",
-        "JWT-based authentication and authorization",
-        "Real-time updates using WebSocket connections",
-        "Automated API documentation with Swagger",
-        "Rate limiting and security middleware",
-        "Comprehensive test coverage with Jest",
-      ],
-      challenges: [
-        "Implementing efficient real-time synchronization",
-        "Designing scalable database schema for complex relationships",
-        "Handling concurrent operations and data consistency",
-        "Optimizing API performance for high-traffic scenarios",
-      ],
-      results: [
-        "Serving 10,000+ API requests daily",
-        "99.95% API uptime with robust error handling",
-        "Sub-100ms average response time",
-        "Zero security vulnerabilities in production",
-      ],
-      githubUrl: "https://github.com/yourusername/task-api",
-      liveUrl: "https://api.your-task-manager.com/docs",
-      metrics: {
-        users: "2,000+ API consumers",
-        performance: "< 100ms response time",
-        impact: "50% productivity increase",
-      },
-    },
-    {
-      id: "3",
-      title: "React Component Library",
-      description: "Reusable component library with TypeScript, Storybook, and automated testing.",
-      longDescription:
-        "A comprehensive React component library built with TypeScript, featuring accessible components, comprehensive documentation, and automated testing. Published to npm with semantic versioning and used across multiple projects.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["React", "TypeScript", "Storybook", "Jest", "Rollup", "CSS-in-JS"],
-      category: "Open Source",
-      year: "2023",
-      status: "Maintained",
-      features: [
-        "50+ reusable React components with TypeScript",
-        "Comprehensive Storybook documentation",
-        "Automated testing with Jest and React Testing Library",
-        "Accessibility compliance (WCAG 2.1)",
-        "Tree-shaking support for optimal bundle size",
-        "Semantic versioning and automated releases",
-      ],
-      challenges: [
-        "Ensuring consistent design system across components",
-        "Implementing comprehensive accessibility features",
-        "Optimizing bundle size while maintaining functionality",
-        "Creating flexible APIs for diverse use cases",
-      ],
-      results: [
-        "1,000+ weekly npm downloads",
-        "Used in 15+ production applications",
-        "100% accessibility compliance achieved",
-        "Reduced development time by 40% for consuming projects",
-      ],
-      githubUrl: "https://github.com/yourusername/react-components",
-      liveUrl: "https://your-components.netlify.app",
-      metrics: {
-        users: "100+ developers using",
-        performance: "< 50kb bundle size",
-        impact: "40% dev time reduction",
-      },
-    },
-    {
-      id: "4",
-      title: "Real-Time Chat Application",
-      description: "Modern chat application with real-time messaging, file sharing, and video calls.",
-      longDescription:
-        "A feature-rich chat application built with React and Node.js, supporting real-time messaging, file sharing, video calls, and group conversations. The application uses WebRTC for peer-to-peer communication and Socket.io for real-time updates.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["React", "Node.js", "Socket.io", "WebRTC", "MongoDB", "AWS S3"],
-      category: "Web Applications",
-      year: "2023",
-      status: "Live",
-      features: [
-        "Real-time messaging with typing indicators",
-        "File and image sharing with cloud storage",
-        "Video and voice calling using WebRTC",
-        "Group conversations and channel management",
-        "Message encryption for security",
-        "Mobile-responsive progressive web app",
-      ],
-      challenges: [
-        "Implementing reliable WebRTC connections",
-        "Handling message synchronization across devices",
-        "Optimizing real-time performance for large groups",
-        "Ensuring message delivery and offline support",
-      ],
-      results: [
-        "Supporting 500+ concurrent users",
-        "99.8% message delivery success rate",
-        "Average connection time under 2 seconds",
-        "High user engagement with 80% daily active users",
-      ],
-      githubUrl: "https://github.com/yourusername/chat-app",
-      liveUrl: "https://your-chat-app.com",
-      metrics: {
-        users: "3,000+ registered users",
-        performance: "< 2s connection time",
-        impact: "80% daily active users",
-      },
-    },
-    {
-      id: "5",
-      title: "Portfolio Website Builder",
-      description: "Drag-and-drop website builder for creating professional portfolios without coding.",
-      longDescription:
-        "An intuitive website builder that allows users to create professional portfolios using a drag-and-drop interface. Features customizable templates, real-time preview, and one-click deployment to various hosting platforms.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["Vue.js", "Node.js", "PostgreSQL", "AWS", "Docker", "Stripe"],
-      category: "Web Applications",
-      year: "2023",
-      status: "Live",
-      features: [
-        "Intuitive drag-and-drop interface",
-        "Professional portfolio templates",
-        "Real-time preview and editing",
-        "Custom domain support",
-        "SEO optimization tools",
-        "One-click deployment to multiple platforms",
-      ],
-      challenges: [
-        "Building a flexible drag-and-drop system",
-        "Generating clean, optimized code from visual designs",
-        "Implementing real-time collaborative editing",
-        "Ensuring cross-browser compatibility",
-      ],
-      results: [
-        "1,500+ portfolios created and deployed",
-        "95% user satisfaction rating",
-        "Average build time reduced to 30 minutes",
-        "Generated $50K+ in revenue",
-      ],
-      githubUrl: "https://github.com/yourusername/portfolio-builder",
-      liveUrl: "https://your-portfolio-builder.com",
-      metrics: {
-        users: "1,500+ portfolios created",
-        performance: "30min average build time",
-        impact: "$50K+ revenue generated",
-      },
-    },
-    {
-      id: "6",
-      title: "Analytics Dashboard",
-      description: "Business intelligence dashboard with real-time data visualization and reporting.",
-      longDescription:
-        "A comprehensive analytics dashboard that aggregates data from multiple sources and provides real-time insights through interactive visualizations. Built for scalability and performance with support for custom reports and automated alerts.",
-      image: "/placeholder.svg?height=300&width=500",
-      technologies: ["React", "D3.js", "Python", "FastAPI", "PostgreSQL", "Redis"],
+        "MetricLeap gives NGOs and impact-driven organizations an AI-assisted alternative to spreadsheet-based monitoring and evaluation. The platform generates metrics tailored to an organization's specific mission, builds stakeholder-specific questionnaires that integrate with Google Forms for data collection, and turns the responses into exportable impact reports — cutting the time it takes to go from raw survey data to a boardroom-ready document.",
+      image: "/projects/metricleap.jpg",
+      technologies: ["Next.js", "Supabase", "PostgreSQL", "Radix UI", "Resend"],
       category: "Full-Stack Projects",
-      year: "2022",
+      year: "2025",
       status: "Live",
       features: [
-        "Real-time data visualization with D3.js",
-        "Custom report builder and scheduling",
-        "Interactive charts and filtering",
-        "Automated alerts and notifications",
-        "Multi-tenant architecture",
-        "Export capabilities (PDF, Excel, CSV)",
+        "AI-generated metric suggestions tailored to an organization's mission and aligned with global M&E standards",
+        "Tailored stakeholder questionnaires with Google Forms integration for frictionless data collection",
+        "Automated report generation with export to Google Docs or PDF",
+        "Support for both quantitative and qualitative measurement",
+        "Secure Supabase-backed authentication and data storage",
       ],
       challenges: [
-        "Processing large datasets efficiently",
-        "Creating responsive and interactive visualizations",
-        "Implementing real-time data streaming",
-        "Optimizing query performance for complex analytics",
+        "Designing an AI metric-generation flow flexible enough to fit very different organizational missions without producing generic, cookie-cutter output",
+        "Keeping stakeholder questionnaires in sync with Google Forms so responses flow back into the platform without manual re-entry",
+        "Structuring collected survey data so it can be reliably assembled into a coherent report automatically",
       ],
       results: [
-        "Processing 1M+ data points daily",
-        "Reduced report generation time by 70%",
-        "Improved decision-making speed by 50%",
-        "Serving 200+ business users across 5 departments",
+        "Shipped a working AI metric-generation → stakeholder form → automated report pipeline end to end",
+        "Built and deployed solo, covering both the UI and the backend",
       ],
-      githubUrl: "https://github.com/yourusername/analytics-dashboard",
-      metrics: {
-        users: "200+ business users",
-        performance: "1M+ data points/day",
-        impact: "70% faster reporting",
-      },
+      liveUrl: "https://v0-metric-leap-design.vercel.app/",
     },
   ]
 
@@ -394,9 +235,9 @@ export default function PortfolioPage() {
 
         <div className="p-6 space-y-6">
           {/* Project Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:items-start">
             {/* File Explorer Sidebar */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 lg:sticky lg:top-6">
               <FadeIn>
                 <Card className="p-4">
                   <div className="flex items-center space-x-2 mb-4">
@@ -409,7 +250,7 @@ export default function PortfolioPage() {
                       <button
                         key={category.id}
                         onClick={() => setSelectedCategory(category.id)}
-                        className={`w-full flex items-center justify-between p-2 rounded-md text-sm transition-all ${
+                        className={`w-full flex items-center justify-between p-2 rounded-md text-sm transition-all cursor-pointer ${
                           selectedCategory === category.id
                             ? "bg-primary text-primary-foreground"
                             : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
@@ -528,111 +369,91 @@ export default function PortfolioPage() {
                 {viewMode === "grid" ? (
                   <StaggerIn staggerDelay={0.1}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {filteredProjects.map((project) => (
-                        <HoverGlow key={project.id} className="h-full rounded-xl">
-                          <Card
-                            className="p-6 h-full cursor-pointer group"
-                            onClick={() => handleProjectClick(project)}
-                          >
-                          <div className="space-y-4">
-                            {/* Project Header */}
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-center space-x-2">
-                                <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                                  {project.category.includes("API") ? (
-                                    <Server className="h-4 w-4 text-primary" />
-                                  ) : project.category.includes("Full-Stack") ? (
-                                    <Code className="h-4 w-4 text-primary" />
-                                  ) : project.category.includes("Open Source") ? (
-                                    <Github className="h-4 w-4 text-primary" />
-                                  ) : (
-                                    <Globe className="h-4 w-4 text-primary" />
+                      {filteredProjects.map((project) => {
+                        const CategoryIcon = categoryIcons[project.category] ?? Globe
+                        return (
+                          <HoverGlow key={project.id} className="h-full rounded-xl">
+                            <Card
+                              className="p-6 h-full flex flex-col cursor-pointer group"
+                              onClick={() => handleProjectClick(project)}
+                            >
+                              <div className="flex-1 space-y-4">
+                                {/* Project Header */}
+                                <div className="flex items-start justify-between gap-3">
+                                  <div className="flex items-center space-x-3 min-w-0">
+                                    <div className="w-9 h-9 shrink-0 bg-primary/10 rounded-lg flex items-center justify-center">
+                                      <CategoryIcon className="h-4 w-4 text-primary" />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <h3 className="font-semibold truncate group-hover:text-primary transition-colors">
+                                        {project.title}
+                                      </h3>
+                                      <p className="text-xs text-muted-foreground truncate">{project.category}</p>
+                                    </div>
+                                  </div>
+                                  <Badge
+                                    variant={project.status === "Live" ? "default" : "secondary"}
+                                    className="shrink-0 text-xs"
+                                  >
+                                    {project.status === "Live" ? (
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                    ) : (
+                                      <AlertTriangle className="h-3 w-3 mr-1" />
+                                    )}
+                                    {project.status}
+                                  </Badge>
+                                </div>
+
+                                {/* Project Description */}
+                                <p className="text-sm text-muted-foreground font-serif line-clamp-2">
+                                  {project.description}
+                                </p>
+
+                                {/* Technologies */}
+                                <div className="flex flex-wrap gap-1.5">
+                                  {project.technologies.slice(0, 4).map((tech, index) => (
+                                    <Badge key={index} variant="outline" className="text-xs">
+                                      {tech}
+                                    </Badge>
+                                  ))}
+                                  {project.technologies.length > 4 && (
+                                    <Badge variant="outline" className="text-xs">
+                                      +{project.technologies.length - 4}
+                                    </Badge>
                                   )}
                                 </div>
-                                <div>
-                                  <h3 className="font-semibold group-hover:text-primary transition-colors">
-                                    {project.title}
-                                  </h3>
-                                  <p className="text-xs text-muted-foreground">{project.category}</p>
-                                </div>
                               </div>
-                              <Badge variant={project.status === "Live" ? "default" : "secondary"} className="text-xs">
-                                {project.status === "Live" ? (
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                ) : (
-                                  <AlertTriangle className="h-3 w-3 mr-1" />
-                                )}
-                                {project.status}
-                              </Badge>
-                            </div>
 
-                            {/* Project Description */}
-                            <p className="text-sm text-muted-foreground font-serif line-clamp-2">
-                              {project.description}
-                            </p>
-
-                            {/* Project Metrics */}
-                            {project.metrics && (
-                              <div className="grid grid-cols-3 gap-2 text-xs">
-                                <div className="text-center p-2 bg-muted/20 rounded">
-                                  <div className="font-mono text-primary">{project.metrics.users?.split(" ")[0]}</div>
-                                  <div className="text-muted-foreground">Users</div>
+                              {/* Action Buttons */}
+                              <div className="flex items-center justify-between pt-4 mt-4 border-t border-border">
+                                <div className="flex space-x-1">
+                                  {project.githubUrl && (
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="h-7 w-7 p-0"
+                                      onClick={(e) => openProjectLink(e, project.githubUrl)}
+                                    >
+                                      <Github className="h-3.5 w-3.5" />
+                                    </Button>
+                                  )}
+                                  {project.liveUrl && (
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="h-7 w-7 p-0"
+                                      onClick={(e) => openProjectLink(e, project.liveUrl)}
+                                    >
+                                      <ExternalLink className="h-3.5 w-3.5" />
+                                    </Button>
+                                  )}
                                 </div>
-                                <div className="text-center p-2 bg-muted/20 rounded">
-                                  <div className="font-mono text-primary">{project.metrics.performance}</div>
-                                  <div className="text-muted-foreground">Speed</div>
-                                </div>
-                                <div className="text-center p-2 bg-muted/20 rounded">
-                                  <div className="font-mono text-primary">{project.metrics.impact?.split(" ")[0]}</div>
-                                  <div className="text-muted-foreground">Impact</div>
-                                </div>
+                                <span className="text-xs text-muted-foreground">{project.year}</span>
                               </div>
-                            )}
-
-                            {/* Technologies */}
-                            <div className="flex flex-wrap gap-1">
-                              {project.technologies.slice(0, 4).map((tech, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
-                                  {tech}
-                                </Badge>
-                              ))}
-                              {project.technologies.length > 4 && (
-                                <Badge variant="outline" className="text-xs">
-                                  +{project.technologies.length - 4}
-                                </Badge>
-                              )}
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center justify-between pt-2 border-t border-border">
-                              <div className="flex space-x-2">
-                                {project.githubUrl && (
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 w-6 p-0"
-                                    onClick={(e) => openProjectLink(e, project.githubUrl)}
-                                  >
-                                    <Github className="h-3 w-3" />
-                                  </Button>
-                                )}
-                                {project.liveUrl && (
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-6 w-6 p-0"
-                                    onClick={(e) => openProjectLink(e, project.liveUrl)}
-                                  >
-                                    <ExternalLink className="h-3 w-3" />
-                                  </Button>
-                                )}
-                              </div>
-                              <span className="text-xs text-muted-foreground">{project.year}</span>
-                            </div>
-                          </div>
-                          </Card>
-                        </HoverGlow>
-                      ))}
+                            </Card>
+                          </HoverGlow>
+                        )
+                      })}
                     </div>
                   </StaggerIn>
                 ) : (

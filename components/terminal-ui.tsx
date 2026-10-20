@@ -100,6 +100,33 @@ interface TerminalLine {
   content: string
   timestamp: number
 }
+
+// Give plain-text output some visual hierarchy instead of flat green on
+// everything: "ALL CAPS:" lines are section headers, "  cmd   - desc" lines
+// split into a highlighted command and a muted description, blank lines
+// become spacers, and everything else is regular body text.
+function renderOutputLine(content: string) {
+  if (content === '') {
+    return <div className="h-2" />
+  }
+
+  if (/^[A-Z ]+:$/.test(content)) {
+    return <div className="text-orange-400 font-semibold mt-2 first:mt-0">{content}</div>
+  }
+
+  const commandMatch = content.match(/^ {2}(\S.*?)\s{2,}- (.+)$/)
+  if (commandMatch) {
+    const [, cmd, desc] = commandMatch
+    return (
+      <div className="flex flex-wrap gap-x-2 pl-4">
+        <span className="text-white">{cmd}</span>
+        <span className="text-white/50">- {desc}</span>
+      </div>
+    )
+  }
+
+  return <div className="text-slate-200 pl-4">{content}</div>
+}
 interface InteractiveTerminalProps {
     autoScroll?: boolean
   }
@@ -286,51 +313,57 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
 
   return (
     <div className="h-full text-white flex flex-col">
-      <Scrollable ref={scrollableRef}>
-        {/* Terminal Output */}
-        <div
-          className="flex-1 text-xs md:text-sm p-3 md:p-4 h-full space-y-1"
-          onClick={() => inputRef.current?.focus()}
-        >
-          {history.map((line, index) => (
-            <div key={`${line.timestamp}-${index}`} className="wrap-break-word">
-              {line.type === 'command' ? (
-                <div className="flex items-start space-x-2">
-                  <span className="text-orange-500 shrink-0">$</span>
-                  <span className="text-white">{line.content}</span>
-                </div>
-              ) : line.type === 'error' ? (
-                <div className="text-red-400 pl-4">{line.content}</div>
-              ) : line.type === 'boot' ? (
-                <div className="text-white/40">{line.content}</div>
-              ) : (
-                <div className="text-green-400 pl-4">{line.content}</div>
-              )}
-            </div>
-          ))}
-
-          {/* Input Line */}
-          <div className="flex items-start space-x-2 pt-2">
-            <span className="text-orange-500 shrink-0">$</span>
-            <div className="relative flex-1">
-              <div aria-hidden className="pointer-events-none absolute inset-0 whitespace-pre">
-                <span className="invisible">{input}</span>
-                <span className="text-white/30">{suggestion ? suggestion.slice(trimmedInput.length) : ''}</span>
+      {/* flex-1 + min-h-0 (not h-full) so this reliably claims exactly the
+          space left after the header above, instead of fighting it via
+          flex-shrink — which is what was throwing the top/bottom padding
+          inside the card out of sync. */}
+      <div className="flex-1 min-h-0">
+        <Scrollable ref={scrollableRef}>
+          {/* Terminal Output */}
+          <div
+            className="text-xs md:text-sm p-3 md:p-4 space-y-1"
+            onClick={() => inputRef.current?.focus()}
+          >
+            {history.map((line, index) => (
+              <div key={`${line.timestamp}-${index}`} className="wrap-break-word">
+                {line.type === 'command' ? (
+                  <div className="flex items-start space-x-2">
+                    <span className="text-orange-500 shrink-0">$</span>
+                    <span className="text-white">{line.content}</span>
+                  </div>
+                ) : line.type === 'error' ? (
+                  <div className="text-red-400 pl-4">{line.content}</div>
+                ) : line.type === 'boot' ? (
+                  <div className="text-white/40">{line.content}</div>
+                ) : (
+                  renderOutputLine(line.content)
+                )}
               </div>
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="relative w-full bg-transparent outline-none text-white caret-orange-500"
-                spellCheck={false}
-                autoComplete="off"
-              />
+            ))}
+
+            {/* Input Line */}
+            <div className="flex items-start space-x-2 pt-2">
+              <span className="text-orange-500 shrink-0">$</span>
+              <div className="relative flex-1">
+                <div aria-hidden className="pointer-events-none absolute inset-0 whitespace-pre">
+                  <span className="invisible">{input}</span>
+                  <span className="text-white/30">{suggestion ? suggestion.slice(trimmedInput.length) : ''}</span>
+                </div>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="relative w-full bg-transparent outline-none text-white caret-orange-500"
+                  spellCheck={false}
+                  autoComplete="off"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Scrollable>
+        </Scrollable>
+      </div>
 
       {/* Quick-tap commands — the input never autofocuses on touch devices,
           so this is the discovery path for mobile visitors. */}
@@ -340,7 +373,7 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
             <button
               key={cmd}
               onClick={() => handleCommand(cmd)}
-              className="shrink-0 rounded-full border border-primary/30 px-3 py-1 text-xs text-primary/90 active:bg-primary/20"
+              className="shrink-0 cursor-pointer rounded-full border border-primary/30 px-3 py-1 text-xs text-primary/90 active:bg-primary/20"
             >
               {cmd}
             </button>

@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Github, Calendar, Users, Target } from "lucide-react"
+import { ExternalLink, Github, Calendar, Users, Target, AlertTriangle, CheckCircle2 } from "lucide-react"
 import Image from "next/image"
 
 interface Project {
@@ -77,7 +77,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                 <ul className="space-y-2">
                   {project.challenges.map((challenge, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-primary">•</span>
+                      <AlertTriangle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-muted-foreground font-serif">{challenge}</span>
                     </li>
                   ))}
@@ -90,7 +90,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                 <ul className="space-y-2">
                   {project.results.map((result, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-accent">✓</span>
+                      <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-muted-foreground font-serif">{result}</span>
                     </li>
                   ))}
