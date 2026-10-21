@@ -196,43 +196,6 @@ export default function PortfolioPage() {
       ],
       liveUrl: "https://www.tobipeter.com",
     },
-    {
-      id: "4",
-      title: "LedgerCore",
-      description:
-        "Double-entry ledger and settlement engine proving a transfer can move money between accounts under concurrent load without double-spending, overdrawing, or losing an event.",
-      longDescription:
-        "LedgerCore is a backend engineering deep-dive into the correctness problem at the heart of any payments system: how do you move money between two accounts under real concurrency without ever losing it, duplicating it, or deadlocking? Accounts are locked in ascending-id order regardless of debit/credit role, making the classic two-resource deadlock structurally impossible rather than just unlikely. Idempotent transfers run as three independent transactions — claim, locked transfer, finalize — so a racing duplicate request sees the claim the instant it commits. Every journal entry is balanced and made immutable by Postgres deferred constraint triggers, not just application code, and a transactional outbox publishes each entry to Kafka exactly once via a SKIP LOCKED relay that multiple instances can poll concurrently without double-claiming rows. A nightly reconciliation job compares the ledger against a simulated bank statement using a sort-merge join over streamed, fetch-size-hinted cursors — constant memory regardless of dataset size.",
-      image: "/placeholder.svg",
-      technologies: ["Java 21", "Spring Boot", "PostgreSQL", "Apache Kafka", "Liquibase", "Testcontainers", "k6"],
-      category: "APIs & Backend",
-      year: "2026",
-      status: "Complete",
-      features: [
-        "Pessimistic row-level locking (SELECT ... FOR UPDATE) acquired in ascending account-id order, making the two-account deadlock structurally impossible rather than just unlikely",
-        "Idempotent transfers as three independent transactions — claim, locked transfer, finalize — so a concurrent duplicate request resolves against a claim visible before the original transfer even finishes",
-        "Zero-sum and immutability enforced by Postgres deferred constraint triggers: journal entries must balance to zero and can never be edited or deleted, only corrected via a new reversing entry",
-        "Transactional outbox pattern — each journal entry's Kafka event commits or rolls back in the same transaction as the ledger write, published at-least-once by a stateless relay using SELECT ... FOR UPDATE SKIP LOCKED so multiple relay instances never double-publish",
-        "Nightly reconciliation via a sort-merge join over streamed, fetch-size-hinted cursors (not a hash join) — constant memory regardless of ledger size, flagging ledger-only, bank-only, and amount-mismatch discrepancies",
-        "29 automated tests against real infrastructure (Testcontainers Postgres + Kafka, never H2 or an embedded broker), including dedicated concurrency tests that fire dozens of racing transfers and duplicate requests to prove the guarantees under actual contention",
-      ],
-      challenges: [
-        "Proving — not just asserting — correctness under concurrency: ConcurrentTransferTest fires 80 concurrent transfers alternating direction between two accounts and asserts zero balance drift and no deadlock",
-        "Closing the idempotency window where a crash between a transfer committing and its idempotency record finalizing could leave an orphaned in-progress record, via staleness-based reclaim",
-        "Streaming a nightly reconciliation job in genuinely constant memory — a naive hash-join or unhinted JPQL stream would silently materialize the full result set in memory before it could be consumed",
-      ],
-      results: [
-        "29/29 automated tests passing against real Testcontainers-backed Postgres and Kafka, including dedicated concurrency and idempotency-race tests",
-        "Load tested with k6: 219.6 transfers/sec sustained at 50 concurrent VUs, p99 latency 1.32s, 0% error rate across 28,833 requests",
-        "Zero balance drift verified via psql across 28,733 transfers in the load test's balance-conservation check",
-      ],
-      githubUrl: "https://github.com/beatsbydan/ledger-core",
-      metrics: {
-        throughput: "219.6 transfers/sec",
-        p99: "1.32s @ 50 VUs",
-        drift: "Zero across 28,733 transfers",
-      },
-    },
   ]
 
   const projectStats = {

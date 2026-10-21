@@ -175,14 +175,6 @@ const projects: {
     tech: ["React", "Vite", "TanStack Query", "Tailwind CSS", "Framer Motion"],
     liveUrl: "https://www.tobipeter.com",
   },
-  {
-    name: "LedgerCore",
-    type: "Double-Entry Ledger & Settlement Engine",
-    status: "Complete",
-    tech: ["Java 21", "Spring Boot", "PostgreSQL", "Apache Kafka", "Liquibase"],
-    githubUrl: "https://github.com/beatsbydan/ledger-core",
-    metrics: { throughput: "219.6 tx/sec", p99: "1.32s", drift: "0" },
-  },
 ]
 
 export default function ResumePage() {
