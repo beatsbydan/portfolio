@@ -42,11 +42,7 @@ interface Project {
   results: string[]
   githubUrl?: string
   liveUrl?: string
-  metrics?: {
-    users?: string
-    performance?: string
-    impact?: string
-  }
+  metrics?: Record<string, string>
 }
 
 export default function PortfolioPage() {
@@ -124,9 +120,9 @@ export default function PortfolioPage() {
       ],
       liveUrl: "https://farmzone.africa",
       metrics: {
-        users: "15,000+ orders fulfilled",
-        performance: "Nationwide, 37 states",
-        impact: "50,000+ livestock supplied",
+        orders: "15,000+ fulfilled",
+        states: "37, nationwide",
+        livestock: "50,000+ supplied",
       },
     },
     {
@@ -232,9 +228,9 @@ export default function PortfolioPage() {
       ],
       githubUrl: "https://github.com/beatsbydan/ledger-core",
       metrics: {
-        users: "219.6 transfers/sec",
-        performance: "p99 1.32s @ 50 concurrent VUs",
-        impact: "Zero balance drift across 28,733 transfers",
+        throughput: "219.6 transfers/sec",
+        p99: "1.32s @ 50 VUs",
+        drift: "Zero across 28,733 transfers",
       },
     },
   ]

@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Github, Calendar, Users, Target, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { ExternalLink, Github, Calendar, Target, AlertTriangle, CheckCircle2 } from "lucide-react"
 import Image from "next/image"
 
 interface Project {
@@ -21,11 +21,7 @@ interface Project {
   results: string[]
   githubUrl?: string
   liveUrl?: string
-  metrics?: {
-    users?: string
-    performance?: string
-    impact?: string
-  }
+  metrics?: Record<string, string>
 }
 
 interface ProjectModalProps {
@@ -126,24 +122,12 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             <div className="space-y-3">
               <h3 className="text-xl font-semibold font-sans">Project Metrics</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {project.metrics.users && (
-                  <div className="rounded-lg border border-border bg-muted/20 p-4 flex items-start gap-2">
-                    <Users className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm font-serif">{project.metrics.users}</span>
+                {Object.entries(project.metrics).map(([key, value]) => (
+                  <div key={key} className="rounded-lg border border-border bg-muted/20 p-4">
+                    <div className="text-xs font-medium text-muted-foreground uppercase mb-1">{key}</div>
+                    <div className="text-sm font-serif">{value}</div>
                   </div>
-                )}
-                {project.metrics.performance && (
-                  <div className="rounded-lg border border-border bg-muted/20 p-4">
-                    <div className="text-xs font-medium text-muted-foreground uppercase mb-1">Performance</div>
-                    <div className="text-sm font-serif">{project.metrics.performance}</div>
-                  </div>
-                )}
-                {project.metrics.impact && (
-                  <div className="rounded-lg border border-border bg-muted/20 p-4">
-                    <div className="text-xs font-medium text-muted-foreground uppercase mb-1">Impact</div>
-                    <div className="text-sm font-serif">{project.metrics.impact}</div>
-                  </div>
-                )}
+                ))}
               </div>
             </div>
           )}
