@@ -156,7 +156,7 @@ const projects: {
     name: "Farm Zone",
     type: "Livestock E-Commerce Platform",
     status: "Live",
-    tech: ["React", "Vite", "REST API", "Paystack"],
+    tech: ["Node.js", "Express", "TypeScript", "PostgreSQL", "Redis", "BullMQ", "Paystack"],
     liveUrl: "https://farmzone.africa",
     metrics: { orders: "15,000+", livestock: "50,000+", states: "37" },
   },
@@ -164,8 +164,15 @@ const projects: {
     name: "MetricLeap",
     type: "AI-Powered M&E SaaS",
     status: "Live",
-    tech: ["Next.js", "Supabase", "Radix UI"],
+    tech: ["Next.js", "React", "TypeScript", "Supabase", "OpenAI API", "Google Forms API"],
     liveUrl: "https://v0-metric-leap-design.vercel.app/",
+  },
+  {
+    name: "Tobi Peter",
+    type: "Artist Website & Admin CMS",
+    status: "Live",
+    tech: ["React", "Vite", "TanStack Query", "Tailwind CSS", "Framer Motion"],
+    liveUrl: "https://www.tobipeter.com",
   },
 ]
 
@@ -268,8 +275,8 @@ export default function ResumePage() {
 
                       <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-primary">50+</div>
-                          <div className="text-xs text-muted-foreground">Projects Completed</div>
+                          <div className="text-2xl font-bold text-primary">{projects.length}</div>
+                          <div className="text-xs text-muted-foreground">Live Projects Shipped</div>
                         </div>
                         <div className="text-center">
                           <div className="text-2xl font-bold text-primary">3+</div>

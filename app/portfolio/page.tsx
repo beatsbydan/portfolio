@@ -21,8 +21,6 @@ import {
   Pause,
   RotateCcw,
   Activity,
-  Users,
-  TrendingUp,
   CheckCircle,
   AlertTriangle,
 } from "lucide-react"
@@ -88,30 +86,41 @@ export default function PortfolioPage() {
       description:
         "Nigeria's leading livestock marketplace — premium Halal rams, goats, cows and camels, with nationwide delivery, processing and grilling services.",
       longDescription:
-        "Farm Zone is a full e-commerce platform for Nigeria's livestock market, connecting individual and corporate buyers with Halal-certified rams, goats, cows and camels. Buyers choose between a retail flow for personal and Eid purchases or a bulk/corporate flow for events and volume orders, browse live pricing by animal size, and check out with Paystack or Google Sign-In. Beyond the sale, Farm Zone coordinates professional slaughter and meat processing, event grilling services, and nationwide delivery — for a business that has supplied 50,000+ animals and fulfilled 15,000+ orders across all 37 states.",
+        "Farm Zone is a full e-commerce platform for Nigeria's livestock market, connecting individual and corporate buyers with Halal-certified rams, goats, cows and camels. The backend is a production-grade Node.js/Express API: checkout runs through Redis-locked, queue-processed order placement so an animal is never double-sold, Paystack payments are verified via HMAC-signed webhooks, and Postgres full-text and trigram search power the catalog and admin tooling. Buyers choose between a retail flow for personal and Eid purchases or a bulk/corporate flow for events and volume orders, browse live pricing by animal size, and check out with Paystack or Google Sign-In. Beyond the sale, Farm Zone coordinates professional slaughter and meat processing, event grilling services, and nationwide delivery — for a business that has supplied 50,000+ animals and fulfilled 15,000+ orders across all 37 states.",
       image: "/projects/farmzone.jpg",
-      technologies: ["React", "Vite", "REST API", "Paystack", "Google Sign-In"],
+      technologies: [
+        "Node.js",
+        "Express",
+        "TypeScript",
+        "PostgreSQL",
+        "Redis",
+        "BullMQ",
+        "Paystack",
+        "JWT Auth",
+        "Docker",
+        "Prometheus",
+      ],
       category: "Full-Stack Projects",
       year: "2025",
       status: "Live",
       features: [
-        "Dual shopping flows — individual retail purchases vs. corporate/bulk ordering with volume pricing",
-        "Live product catalog with per-animal, per-size pricing across rams, goats, cows and camels",
-        "Google Sign-In and Paystack-powered checkout",
-        "Custom versioned REST API built from scratch to power the storefront",
-        "Nationwide delivery coordination plus meat processing and event grilling add-on services",
-        "Installable PWA with light/dark mode and WhatsApp-based support",
+        "Async order pipeline — checkout enqueues a BullMQ job and returns immediately, while a worker confirms the order inside a Postgres transaction with row-level locking",
+        "Redis-backed distributed locking (atomic Lua scripts) reserves a product the moment it's added to cart — three independent layers against overselling, from cache to queue to database",
+        "Paystack checkout with HMAC-SHA512 webhook signature verification and idempotent payment recording",
+        "JWT access + refresh tokens with family-based rotation and theft detection — a reused, revoked token revokes every session in that family",
+        "Full-text and trigram search (Postgres tsvector + pg_trgm) across the product and news catalog, plus server-enforced feature flags that can take any module offline without a redeploy",
+        "Prometheus metrics and structured Winston/Loki logging, deployed via Docker + PM2 cluster mode through a GitHub Actions → GHCR → Render/DigitalOcean pipeline",
       ],
       challenges: [
+        "Guaranteeing an animal is never sold twice under concurrent checkout traffic — solved with a three-layer lock: a Redis Lua-script reservation, a BullMQ worker re-check, and a Postgres row lock inside the final transaction",
+        "Making payment confirmation reliable against Paystack retries and duplicate webhooks — payments are recorded idempotently so a replayed webhook is a safe no-op",
         "Modeling livestock as a product catalog with per-animal, per-size pricing instead of the flat SKUs typical e-commerce platforms assume",
-        "Designing and versioning a REST API from scratch to serve both the retail and bulk/corporate ordering flows",
-        "Integrating Paystack for Nigerian payment rails alongside Google Sign-In for account access",
-        "Splitting the UX cleanly between individual retail buyers and corporate/bulk buyers without duplicating the entire storefront",
+        "Splitting the UX cleanly between individual retail buyers and corporate/bulk buyers, including Excel-based bulk order ingestion, without duplicating the entire storefront",
       ],
       results: [
         "Live platform behind a business reporting 15,000+ orders fulfilled and 50,000+ livestock supplied",
         "Nationwide reach across all 37 states Farm Zone serves",
-        "Built and shipped solo, covering both the frontend UI and the backend API",
+        "Designed and shipped the production backend solo — API, database, queues, payments, observability and deployment pipeline",
       ],
       liveUrl: "https://farmzone.africa",
       metrics: {
@@ -126,29 +135,70 @@ export default function PortfolioPage() {
       description:
         "AI-powered monitoring & evaluation platform helping impact-driven organizations measure, track, and report their social impact.",
       longDescription:
-        "MetricLeap gives NGOs and impact-driven organizations an AI-assisted alternative to spreadsheet-based monitoring and evaluation. The platform generates metrics tailored to an organization's specific mission, builds stakeholder-specific questionnaires that integrate with Google Forms for data collection, and turns the responses into exportable impact reports — cutting the time it takes to go from raw survey data to a boardroom-ready document.",
+        "MetricLeap gives NGOs and impact-driven organizations an AI-assisted alternative to spreadsheet-based monitoring and evaluation. A fine-tuned GPT-4o-mini model suggests metrics tailored to an organization's specific mission, generates stakeholder-specific survey questions, and turns collected responses into a structured, exportable impact report — cutting the time it takes to go from raw survey data to a boardroom-ready document. Supabase handles auth and storage with Row-Level Security enforced per user, and stakeholder questionnaires are real, programmatically-created Google Forms rather than an in-house form renderer, so data collection works wherever Google Forms already does.",
       image: "/projects/metricleap.jpg",
-      technologies: ["Next.js", "Supabase", "PostgreSQL", "Radix UI", "Resend"],
+      technologies: [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Supabase",
+        "PostgreSQL",
+        "OpenAI API",
+        "Google Forms API",
+        "Tailwind CSS",
+      ],
       category: "Full-Stack Projects",
       year: "2025",
       status: "Live",
       features: [
-        "AI-generated metric suggestions tailored to an organization's mission and aligned with global M&E standards",
-        "Tailored stakeholder questionnaires with Google Forms integration for frictionless data collection",
-        "Automated report generation with export to Google Docs or PDF",
-        "Support for both quantitative and qualitative measurement",
-        "Secure Supabase-backed authentication and data storage",
+        "AI-generated metric suggestions from a custom fine-tuned GPT-4o-mini model, tailored to an organization's mission rather than a generic template",
+        "AI-generated stakeholder survey questions, distributed through real Google Forms created and managed via the Google Forms API — not an in-house form builder",
+        "AI-assembled impact reports: survey responses are pulled back from Google Forms and turned into a structured report, rendered server-side to PDF",
+        "Supabase Postgres + Auth, with Row-Level Security policies enforcing per-user data isolation at the database level, not just in application code",
+        "Supabase SSR session handling via middleware, keeping auth state in sync across server and client",
       ],
       challenges: [
         "Designing an AI metric-generation flow flexible enough to fit very different organizational missions without producing generic, cookie-cutter output",
-        "Keeping stakeholder questionnaires in sync with Google Forms so responses flow back into the platform without manual re-entry",
-        "Structuring collected survey data so it can be reliably assembled into a coherent report automatically",
+        "Wiring the Google Forms API to programmatically create forms and questions, then reliably pull responses back in for report generation",
+        "Generating a readable, correctly-paginated PDF report entirely server-side from AI-structured output",
+        "Enforcing per-user data isolation with Postgres Row-Level Security rather than relying solely on application-layer checks",
       ],
       results: [
-        "Shipped a working AI metric-generation → stakeholder form → automated report pipeline end to end",
+        "Shipped a working AI metric-generation → Google Forms questionnaire → AI report pipeline end to end",
         "Built and deployed solo, covering both the UI and the backend",
       ],
       liveUrl: "https://v0-metric-leap-design.vercel.app/",
+    },
+    {
+      id: "3",
+      title: "Tobi Peter",
+      description:
+        "Artist website and admin CMS for touring DJ/producer Tobi Peter — public EPK, tour map and music hub, plus a protected dashboard to manage it all.",
+      longDescription:
+        "A commissioned site for Nigerian DJ, producer and songwriter Tobi Peter: a public-facing artist site (music, tour shows, an electronic press kit with an interactive world map of past shows, a shop and a subscribe flow) paired with a password-protected admin dashboard where the team manages shows, songs, blog posts, images and site content without touching code. The frontend is a React SPA that talks to a separate backend API — this build is the client. Originally built on Create React App, it's been continuously modernized since: migrated to Vite, Redux rewritten to TanStack Query, and the whole UI converted to Tailwind CSS v4.",
+      image: "/projects/tobipeter.jpg",
+      technologies: ["React", "Vite", "TanStack Query", "React Router", "Tailwind CSS", "Framer Motion", "Vitest"],
+      category: "Web Applications",
+      year: "2023",
+      status: "Live",
+      features: [
+        "Interactive world map of tour history (react-simple-maps + d3 + topojson) on the public EPK page",
+        "Full admin CRUD dashboard — shows, songs, blog posts, images and site content — with a Chart.js-powered overview",
+        "TanStack Query data layer with an Axios client that injects auth headers and retries once on a 401 after refreshing the session",
+        "Form validation on every admin entity via React Hook Form + Zod",
+        "Choreographed page transitions with Framer Motion, explicitly respecting prefers-reduced-motion",
+        "CI-gated quality bar — GitHub Actions runs lint, Prettier format-check, and Vitest with enforced coverage thresholds on every push",
+      ],
+      challenges: [
+        "Migrating a live, in-production Create React App to Vite — and Redux to TanStack Query — without a rewrite or downtime",
+        "Keeping an animated, transition-heavy SPA accessible: jsx-a11y linting plus a reduced-motion fallback so the animation never becomes a barrier",
+        "Building a general-purpose admin CMS across five distinct content types that stays simple enough for a non-technical team to actually use",
+      ],
+      results: [
+        "Live in production since 2023 and still actively maintained — 148+ commits across a multi-phase modernization",
+        "Shipped the full client rewrite (CRA → Vite, Redux → TanStack Query, Tailwind v4) with zero loss of existing functionality",
+      ],
+      liveUrl: "https://www.tobipeter.com",
     },
   ]
 
@@ -157,6 +207,7 @@ export default function PortfolioPage() {
     live: projects.filter((p) => p.status === "Live").length,
     maintained: projects.filter((p) => p.status === "Maintained").length,
     technologies: [...new Set(projects.flatMap((p) => p.technologies))].length,
+    categories: [...new Set(projects.map((p) => p.category))].length,
   }
 
   const filteredProjects =
@@ -309,20 +360,20 @@ export default function PortfolioPage() {
 
                   <Card className="p-4">
                     <div className="flex items-center space-x-2 mb-2">
-                      <Users className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm font-medium">Total Users</span>
+                      <Folder className="h-4 w-4 text-blue-500" />
+                      <span className="text-sm font-medium">Total Projects</span>
                     </div>
-                    <div className="text-2xl font-bold text-blue-500">15k+</div>
-                    <div className="text-xs text-muted-foreground">Across all projects</div>
+                    <div className="text-2xl font-bold text-blue-500">{projectStats.total}</div>
+                    <div className="text-xs text-muted-foreground">Shipped and live</div>
                   </Card>
 
                   <Card className="p-4">
                     <div className="flex items-center space-x-2 mb-2">
-                      <TrendingUp className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">Performance</span>
+                      <Globe className="h-4 w-4 text-primary" />
+                      <span className="text-sm font-medium">Categories</span>
                     </div>
-                    <div className="text-2xl font-bold text-primary">99.9%</div>
-                    <div className="text-xs text-muted-foreground">Average uptime</div>
+                    <div className="text-2xl font-bold text-primary">{projectStats.categories}</div>
+                    <div className="text-xs text-muted-foreground">Project types</div>
                   </Card>
 
                   <Card className="p-4">
