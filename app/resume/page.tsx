@@ -149,7 +149,8 @@ const projects: {
   type: string
   status: string
   tech: string[]
-  liveUrl: string
+  liveUrl?: string
+  githubUrl?: string
   metrics?: Record<string, string>
 }[] = [
   {
@@ -173,6 +174,14 @@ const projects: {
     status: "Live",
     tech: ["React", "Vite", "TanStack Query", "Tailwind CSS", "Framer Motion"],
     liveUrl: "https://www.tobipeter.com",
+  },
+  {
+    name: "LedgerCore",
+    type: "Double-Entry Ledger & Settlement Engine",
+    status: "Complete",
+    tech: ["Java 21", "Spring Boot", "PostgreSQL", "Apache Kafka", "Liquibase"],
+    githubUrl: "https://github.com/beatsbydan/ledger-core",
+    metrics: { throughput: "219.6 tx/sec", p99: "1.32s", drift: "0" },
   },
 ]
 
@@ -276,7 +285,7 @@ export default function ResumePage() {
                       <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                         <div className="text-center">
                           <div className="text-2xl font-bold text-primary">{projects.length}</div>
-                          <div className="text-xs text-muted-foreground">Live Projects Shipped</div>
+                          <div className="text-xs text-muted-foreground">Projects Shipped</div>
                         </div>
                         <div className="text-center">
                           <div className="text-2xl font-bold text-primary">3+</div>
@@ -507,15 +516,28 @@ export default function ResumePage() {
                         ))}
                       </div>
 
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                        View Live
-                      </a>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          View Live
+                        </a>
+                      )}
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
+                        >
+                          <Github className="h-3 w-3" />
+                          View Source
+                        </a>
+                      )}
                     </div>
                   </Card>
                 ))}
