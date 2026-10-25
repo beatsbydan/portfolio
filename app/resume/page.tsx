@@ -78,6 +78,8 @@ const techCategories: {
   },
 ]
 
+const allTechSkills = techCategories.flatMap((category) => [...category.skills, ...(category.familiar ?? [])])
+
 interface Certification {
   title: string
   issuer: string
@@ -250,6 +252,7 @@ export default function ResumePage() {
 
           {/* Overview Section */}
           {activeSection === "overview" && (
+            <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Profile Card */}
               <div className="lg:col-span-2">
@@ -352,6 +355,20 @@ export default function ResumePage() {
                   </Card>
                 </SlideInRight>
               </div>
+            </div>
+
+            {/* Tech Stack Marquee */}
+            <FadeIn delay={0.3}>
+              <div className="relative overflow-hidden rounded-lg border border-border bg-muted/10 py-4 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
+                <div className="marquee-track flex w-max items-center gap-3">
+                  {[...allTechSkills, ...allTechSkills].map((skill, index) => (
+                    <Badge key={index} variant="outline" className="shrink-0 font-mono text-xs">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
             </div>
           )}
 
