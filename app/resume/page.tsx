@@ -175,6 +175,14 @@ const projects: {
     tech: ["React", "Vite", "TanStack Query", "Tailwind CSS", "Framer Motion"],
     liveUrl: "https://www.tobipeter.com",
   },
+  {
+    name: "PitWall",
+    type: "F1 Race-Strategy Dashboard",
+    status: "Complete",
+    tech: ["Python", "LightGBM", "FastF1", "Next.js", "React", "TypeScript"],
+    githubUrl: "https://github.com/beatsbydan/pitwall",
+    metrics: { mae: "2.021s", "win probability": "99.8%", laps: "62,311" },
+  },
 ]
 
 export default function ResumePage() {

@@ -196,6 +196,54 @@ export default function PortfolioPage() {
       ],
       liveUrl: "https://www.tobipeter.com",
     },
+    {
+      id: "4",
+      title: "PitWall",
+      description:
+        "An F1 race-strategy dashboard — a trained tyre-degradation model, a Monte Carlo strategy simulator, a live server, and a real-time UI, built in four verified phases.",
+      longDescription:
+        "PitWall predicts how an F1 tyre degrades lap by lap with a LightGBM model trained on 62,311 real laps from the 2022–2024 seasons, then runs that prediction hundreds of times through a Monte Carlo simulator to compare pit strategies — 'stay out' vs. 'pit now' — as a distribution of outcomes rather than a single guess, so the comparison accounts for real race randomness like safety cars. An async Python server drives that simulation continuously from a live-shaped data stream (either replayed historical data or F1's real live-timing feed, behind one shared interface) and pushes results over WebSocket to a Next.js dashboard that mirrors a real F1 broadcast graphic: a team-grouped sidebar of every driver on track, with a full strategy comparison computed on demand for whichever one is selected.",
+      image: "/projects/pitwall.jpg",
+      technologies: [
+        "Python",
+        "LightGBM",
+        "pandas",
+        "FastF1",
+        "asyncio",
+        "WebSockets",
+        "Next.js",
+        "React",
+        "TypeScript",
+      ],
+      category: "Full-Stack Projects",
+      year: "2026",
+      status: "Complete",
+      features: [
+        "LightGBM tyre-degradation model trained on 62,311 real laps across three F1 seasons, evaluated on a strictly time-ordered held-out split (never a random shuffle) so it can't learn anything about races it's supposed to have never seen",
+        "Monte Carlo strategy simulator that runs each candidate pit strategy hundreds of times with paired random seeds — same safety-car and noise draws across strategies — so the win-probability comparison isolates the real structural difference instead of noise",
+        "Async live server with one shared source interface for replayed historical races and F1's real live-timing feed, bridging FastF1's thread-based SignalR client into asyncio via a queue and loop.call_soon_threadsafe",
+        "Multi-driver architecture: every car's cheap state streams continuously for the sidebar, while the expensive ~90-second Monte Carlo comparison only ever runs for whichever one driver is currently selected",
+        "Next.js dashboard with a hand-rolled design system (no component library), tabular numerals so live-updating digits never jitter, requestAnimationFrame-based count-up animation respecting prefers-reduced-motion, and a pre-hydration theme script for light/dark with no flash of the wrong theme",
+        "Real automated test coverage on both sides — 5 pytest modules for the data/model/simulation pipeline, 6 Vitest + Testing Library suites for the dashboard's hooks and components",
+      ],
+      challenges: [
+        "F1 locked its live-timing archive behind an F1TV subscription mid-project — worked around first with a public CSV (which lost weather and safety-car filtering, visibly hurting accuracy), then properly fixed with a real subscription and a brand-new FastF1 alpha release that added authentication",
+        "A single-season training split looked structurally fine but was quietly broken: every circuit appears exactly once per season, so a time-ordered split within one season guarantees the held-out race's circuit was never seen in training at all — fixed by spanning three seasons so circuits repeat",
+        "A reconfigured Singapore circuit shared its old track_temp-correlated label with the new layout, confusing the model about which era's lap times applied — fixed with an explicit season feature, cutting that circuit's error from 13.1s to 1.96s",
+        "FastF1's SignalRClient is synchronous and runs its own thread, not asyncio — bridged into the server's async world with a queue and call_soon_threadsafe rather than reimplementing the connection layer",
+      ],
+      results: [
+        "2.021 seconds mean absolute error on held-out races the model never trained on",
+        "A real strategy comparison (2024 British GP) came out to a decisive 99.8% win probability for the better strategy, with the simulator's bimodal output distribution directly reflecting the safety-car mechanism",
+        "All four phases — model, simulator, live server, dashboard — built, tested, and verified end to end against real race data in an actual browser",
+      ],
+      githubUrl: "https://github.com/beatsbydan/pitwall",
+      metrics: {
+        mae: "2.021s on held-out laps",
+        "win probability": "99.8% (real strategy comparison)",
+        "training laps": "62,311 across 2022–24",
+      },
+    },
   ]
 
   const projectStats = {
