@@ -24,20 +24,19 @@ import {
   Database,
   Server,
   Globe,
-  ExternalLink,
 } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
-import { FadeIn, SlideInRight, StaggerIn, StatusIndicator } from "@/components/animations/reveal-animations"
+import { FadeIn, SlideInRight, StatusIndicator } from "@/components/animations/reveal-animations"
 
 const personalInfo = {
-  name: "Software Engineer",
-  title: "Full-Stack Developer",
+  name: "Daniel Onyeachonam",
+  title: "Software Engineer (Mid-Level)",
   location: "Remote / Global",
-  phone: "+1 (555) 123-4567",
-  email: "your.email@example.com",
-  github: "github.com/yourusername",
-  linkedin: "linkedin.com/in/yourprofile",
+  phone: "+234 907 387 0133",
+  email: "daniel.onyeachonam@outlook.com",
+  github: "github.com/beatsbydan",
+  linkedin: "linkedin.com/in/daniel-onyeachonam",
 }
 
 const techCategories: {
@@ -196,7 +195,6 @@ export default function ResumePage() {
     { id: "overview", label: "Overview", icon: User },
     { id: "experience", label: "Experience", icon: Briefcase },
     { id: "skills", label: "Skills", icon: Code },
-    { id: "projects", label: "Projects", icon: ExternalLink },
     { id: "education", label: "Education", icon: GraduationCap },
   ]
 
@@ -204,7 +202,7 @@ export default function ResumePage() {
     <div className="min-h-screen bg-background">
       <Navigation />
 
-      <main className="md:ml-80 min-h-screen print:ml-0">
+      <main className="md:ml-80 print:ml-0">
         {/* Header Bar */}
         <FadeIn duration={0.4}>
           <div className="bg-card border-b border-border p-4 print:hidden">
@@ -479,72 +477,6 @@ export default function ResumePage() {
             </div>
           )}
 
-          {/* Projects Section */}
-          {activeSection === "projects" && (
-            <StaggerIn staggerDelay={0.1}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projects.map((project, index) => (
-                  <Card key={index} className="p-4 hover:shadow-lg transition-all duration-300 hover:border-primary/40">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-semibold">{project.name}</h3>
-                        <Badge variant={project.status === "Live" ? "default" : "outline"} className="text-xs">
-                          {project.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{project.type}</p>
-
-                      {project.metrics && (
-                        <div className="space-y-2">
-                          <h4 className="text-xs font-medium text-muted-foreground uppercase">Metrics</h4>
-                          <div className="grid grid-cols-3 gap-2 text-xs">
-                            {Object.entries(project.metrics).map(([key, value]) => (
-                              <div key={key} className="text-center">
-                                <div className="font-mono text-primary">{value}</div>
-                                <div className="text-muted-foreground capitalize">{key}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex flex-wrap gap-1">
-                        {project.tech.map((tech, techIndex) => (
-                          <Badge key={techIndex} variant="secondary" className="text-xs">
-                            {tech}
-                          </Badge>
-                        ))}
-                      </div>
-
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                          View Live
-                        </a>
-                      )}
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline pt-1"
-                        >
-                          <Github className="h-3 w-3" />
-                          View Source
-                        </a>
-                      )}
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </StaggerIn>
-          )}
-
           {/* Education Section */}
           {activeSection === "education" && (
             <FadeIn>
@@ -560,11 +492,11 @@ export default function ResumePage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold">Bachelor of Science, Computer Science</h3>
-                      <Badge variant="outline">2017-2021</Badge>
+                      <h3 className="font-semibold">Bachelor of Science, Software Engineering</h3>
+                      <Badge variant="outline">2022-2025</Badge>
                     </div>
-                    <p className="text-primary font-medium">Your University</p>
-                    <p className="text-sm text-muted-foreground mb-4">Your City, Country • GPA: 3.8/4.0</p>
+                    <p className="text-primary font-medium">Bowen University</p>
+                    <p className="text-sm text-muted-foreground mb-4">Nigeria • GPA: 4.67/5.00</p>
 
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium">Relevant Coursework</h4>
@@ -575,6 +507,11 @@ export default function ResumePage() {
                           "Software Engineering",
                           "Database Systems",
                           "Web Development",
+                          "Machine Learning Engineering",
+                          "Cloud Computing",
+                          "Operating Systems",
+                          "Computer Networks",
+                          "Distributed Systems",
                         ].map((course, index) => (
                           <Badge key={index} variant="outline" className="text-xs">
                             {course}
