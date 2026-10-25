@@ -312,7 +312,7 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
   }
 
   return (
-    <div className="h-full text-white flex flex-col">
+    <div className="flex-1 min-h-0 text-white flex flex-col">
       {/* flex-1 + min-h-0 (not h-full) so this reliably claims exactly the
           space left after the header above, instead of fighting it via
           flex-shrink — which is what was throwing the top/bottom padding
