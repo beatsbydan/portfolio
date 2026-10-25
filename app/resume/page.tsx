@@ -253,8 +253,8 @@ export default function ResumePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Profile Card */}
               <div className="lg:col-span-2">
-                <FadeIn>
-                  <Card className="p-6">
+                <FadeIn className="h-full">
+                  <Card className="p-6 h-full">
                     <div className="flex items-center space-x-4 mb-6">
                       <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-xl border border-primary/20">
                         <Image src="/daniel.jpg" alt="Daniel Onyeachonam" fill className="object-cover" />
@@ -296,7 +296,7 @@ export default function ResumePage() {
               </div>
 
               {/* Contact Info */}
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4 h-full">
                 <SlideInRight>
                   <Card className="p-4">
                     <h3 className="font-semibold mb-4 flex items-center">
@@ -324,13 +324,13 @@ export default function ResumePage() {
                   </Card>
                 </SlideInRight>
 
-                <SlideInRight delay={0.2}>
-                  <Card className="p-4">
+                <SlideInRight delay={0.2} className="flex-1 min-h-0">
+                  <Card className="p-4 h-full flex flex-col">
                     <h3 className="font-semibold mb-4 flex items-center">
                       <Award className="h-4 w-4 mr-2 text-primary" />
                       Quick Stats
                     </h3>
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-3 text-sm flex-1 flex flex-col justify-center">
                       <div className="flex justify-between">
                         <span>Code Quality:</span>
                         <Badge variant="outline" className="text-xs">
