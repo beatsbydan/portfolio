@@ -321,7 +321,7 @@ const InteractiveTerminal:React.FC<InteractiveTerminalProps> = ({autoScroll = tr
         <Scrollable ref={scrollableRef}>
           {/* Terminal Output */}
           <div
-            className="text-xs md:text-sm p-3 md:p-4 space-y-1"
+            className="min-h-full flex flex-col justify-end text-xs md:text-sm p-3 md:p-4 space-y-1"
             onClick={() => inputRef.current?.focus()}
           >
             {history.map((line, index) => (
