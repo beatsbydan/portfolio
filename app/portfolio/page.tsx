@@ -433,13 +433,15 @@ export default function PortfolioPage() {
 
               {/* Project Grid/List */}
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold flex items-center">
-                    <File className="h-5 w-5 mr-2 text-primary" />
-                    {selectedCategory === "all"
-                      ? "All Projects"
-                      : categories.find((c) => c.id === selectedCategory)?.label}
-                    <Badge variant="outline" className="ml-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-xl font-semibold flex items-center flex-wrap gap-2">
+                    <span className="flex items-center">
+                      <File className="h-5 w-5 mr-2 text-primary shrink-0" />
+                      {selectedCategory === "all"
+                        ? "All Projects"
+                        : categories.find((c) => c.id === selectedCategory)?.label}
+                    </span>
+                    <Badge variant="outline">
                       {filteredProjects.length}
                     </Badge>
                   </h2>
@@ -559,17 +561,17 @@ export default function PortfolioPage() {
                         className="p-4 hover:shadow-md transition-all duration-200 hover:border-primary/40 cursor-pointer"
                         onClick={() => handleProjectClick(project)}
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-6 h-6 bg-primary/10 rounded flex items-center justify-center">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div className="flex items-center space-x-4 min-w-0">
+                            <div className="w-6 h-6 shrink-0 bg-primary/10 rounded flex items-center justify-center">
                               <File className="h-3 w-3 text-primary" />
                             </div>
-                            <div>
-                              <h3 className="font-medium">{project.title}</h3>
-                              <p className="text-xs text-muted-foreground">{project.description}</p>
+                            <div className="min-w-0">
+                              <h3 className="font-medium truncate">{project.title}</h3>
+                              <p className="text-xs text-muted-foreground truncate">{project.description}</p>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0">
                             <span>{project.technologies.length} technologies</span>
                             <Badge variant="outline" className="text-xs">
                               {project.status}
