@@ -402,9 +402,9 @@ export default function ResumePage() {
                 <div className="space-y-8">
                   {workHistory.map((company, index) => (
                     <div key={index} className="relative">
-                      <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
-                          <Building className="h-5 w-5 text-primary" />
+                      <div className="flex items-start space-x-3 sm:space-x-4">
+                        <div className="w-9 h-9 sm:w-12 sm:h-12 shrink-0 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+                          <Building className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
@@ -432,7 +432,7 @@ export default function ResumePage() {
                         </div>
                       </div>
                       {index < workHistory.length - 1 && (
-                        <div className="absolute left-6 top-12 w-px h-16 bg-border"></div>
+                        <div className="absolute left-[18px] top-9 w-px h-16 bg-border sm:left-6 sm:top-12"></div>
                       )}
                     </div>
                   ))}
@@ -520,9 +520,9 @@ export default function ResumePage() {
                   <h2 className="text-xl font-semibold">Education</h2>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
-                    <GraduationCap className="h-5 w-5 text-primary" />
+                <div className="flex items-start space-x-3 sm:space-x-4">
+                  <div className="w-9 h-9 sm:w-12 sm:h-12 shrink-0 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20">
+                    <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
