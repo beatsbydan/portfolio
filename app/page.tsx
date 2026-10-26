@@ -37,7 +37,7 @@ export default function HomePage() {
 
         <div className="h-full p-6">
           <FadeIn>
-            <Card className="h-[75vh] min-h-[500px] terminal-block text-white relative overflow-hidden">
+            <Card className="h-[480px] terminal-block text-white relative overflow-hidden">
               <DigitalRain className="opacity-20" />
               <div className="relative z-10 px-6 h-full flex flex-col">
                 {/* Terminal Header */}
