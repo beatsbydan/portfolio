@@ -393,10 +393,10 @@ export default function ResumePage() {
           {activeSection === "experience" && (
             <FadeIn>
               <Card className="p-6">
-                <div className="flex items-center space-x-2 mb-6">
-                  <Briefcase className="h-5 w-5 text-primary" />
+                <div className="flex flex-wrap items-center gap-2 mb-6">
+                  <Briefcase className="h-5 w-5 text-primary shrink-0" />
                   <h2 className="text-xl font-semibold">Professional Experience</h2>
-                  <Badge variant="outline">Timeline View</Badge>
+                  <Badge variant="outline" className="shrink-0">Timeline View</Badge>
                 </div>
 
                 <div className="space-y-8">
