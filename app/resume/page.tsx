@@ -29,7 +29,7 @@ import {
   Monitor,
   Sparkles,
 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { FadeIn, SlideInRight, StatusIndicator } from "@/components/animations/reveal-animations"
 
@@ -200,28 +200,6 @@ const projects: {
 
 export default function ResumePage() {
   const [activeSection, setActiveSection] = useState("overview")
-  const [isPrinting, setIsPrinting] = useState(false)
-
-  // Export PDF should produce the complete resume, not just whichever tab
-  // happens to be selected on screen. Mounting every section is deferred to
-  // the moment of printing (rather than always-on) so the tab UI's
-  // scroll-triggered entrance animations don't have to deal with sections
-  // that are hidden (zero-size) at mount time.
-  const handleDownload = () => {
-    setIsPrinting(true)
-  }
-
-  useEffect(() => {
-    if (!isPrinting) return
-    const raf = requestAnimationFrame(() => window.print())
-    return () => cancelAnimationFrame(raf)
-  }, [isPrinting])
-
-  useEffect(() => {
-    const handleAfterPrint = () => setIsPrinting(false)
-    window.addEventListener("afterprint", handleAfterPrint)
-    return () => window.removeEventListener("afterprint", handleAfterPrint)
-  }, [])
 
   const sections = [
     { id: "overview", label: "Overview", icon: User },
@@ -249,9 +227,11 @@ export default function ResumePage() {
                 </Badge>
               </div>
               <div className="flex items-center space-x-4">
-                <Button variant="outline" size="sm" onClick={handleDownload} className="print:hidden bg-transparent">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export PDF
+                <Button variant="outline" size="sm" asChild className="print:hidden bg-transparent">
+                  <a href="/Daniel-Onyeachonam-Resume.pdf" download="Daniel-Onyeachonam-Resume.pdf">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export PDF
+                  </a>
                 </Button>
                 <div className="hidden sm:block">
                   <StatusIndicator status="online" label="Live Document" className="text-sm" />
@@ -281,12 +261,12 @@ export default function ResumePage() {
           </div>
 
           {/* Overview Section */}
-          {(activeSection === "overview" || isPrinting) && (
-            <div className={activeSection === "overview" ? "space-y-6" : "hidden space-y-6 print:block"}>
+          {activeSection === "overview" && (
+            <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Profile Card */}
               <div className="lg:col-span-2">
-                <FadeIn className="h-full" skipAnimation={isPrinting}>
+                <FadeIn className="h-full">
                   <Card className="p-6 h-full">
                     <div className="flex items-center space-x-4 mb-6">
                       <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded-xl border border-primary/20">
@@ -332,7 +312,7 @@ export default function ResumePage() {
 
               {/* Contact Info */}
               <div className="flex flex-col gap-4 h-full">
-                <SlideInRight skipAnimation={isPrinting}>
+                <SlideInRight>
                   <Card className="p-4">
                     <h3 className="font-semibold mb-4 flex items-center">
                       <Terminal className="h-4 w-4 mr-2 text-primary" />
@@ -359,7 +339,7 @@ export default function ResumePage() {
                   </Card>
                 </SlideInRight>
 
-                <SlideInRight delay={0.2} className="flex-1 min-h-0" skipAnimation={isPrinting}>
+                <SlideInRight delay={0.2} className="flex-1 min-h-0">
                   <Card className="p-4 h-full flex flex-col">
                     <h3 className="font-semibold mb-4 flex items-center">
                       <Award className="h-4 w-4 mr-2 text-primary" />
@@ -392,7 +372,7 @@ export default function ResumePage() {
             </div>
 
             {/* Tech Stack Marquee */}
-            <FadeIn delay={0.3} skipAnimation={isPrinting}>
+            <FadeIn delay={0.3}>
               <div className="relative overflow-hidden rounded-lg border border-border bg-muted/10 py-4 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
                 <div className="marquee-track flex w-max items-center gap-3">
                   {[...allTechSkills, ...allTechSkills].map((skill, index) => (
@@ -407,8 +387,8 @@ export default function ResumePage() {
           )}
 
           {/* Experience Section */}
-          {(activeSection === "experience" || isPrinting) && (
-            <FadeIn className={activeSection === "experience" ? "" : "hidden print:block"} skipAnimation={isPrinting}>
+          {activeSection === "experience" && (
+            <FadeIn>
               <Card className="p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <Briefcase className="h-5 w-5 text-primary" />
@@ -459,15 +439,9 @@ export default function ResumePage() {
           )}
 
           {/* Skills Section */}
-          {(activeSection === "skills" || isPrinting) && (
-            <div
-              className={cn(
-                "grid grid-cols-1 gap-6",
-                certifications.length > 0 && "md:grid-cols-2",
-                activeSection !== "skills" && "hidden print:grid",
-              )}
-            >
-              <FadeIn skipAnimation={isPrinting}>
+          {activeSection === "skills" && (
+            <div className={cn("grid grid-cols-1 gap-6", certifications.length > 0 && "md:grid-cols-2")}>
+              <FadeIn>
                 <Card className="p-6">
                   <div className="flex items-center space-x-2 mb-6">
                     <Code className="h-5 w-5 text-primary" />
@@ -508,7 +482,7 @@ export default function ResumePage() {
               </FadeIn>
 
               {certifications.length > 0 && (
-                <FadeIn delay={0.2} skipAnimation={isPrinting}>
+                <FadeIn delay={0.2}>
                   <Card className="p-6">
                     <div className="flex items-center space-x-2 mb-6">
                       <Award className="h-5 w-5 text-primary" />
@@ -535,8 +509,8 @@ export default function ResumePage() {
           )}
 
           {/* Education Section */}
-          {(activeSection === "education" || isPrinting) && (
-            <FadeIn className={activeSection === "education" ? "" : "hidden print:block"} skipAnimation={isPrinting}>
+          {activeSection === "education" && (
+            <FadeIn>
               <Card className="p-6">
                 <div className="flex items-center space-x-2 mb-6">
                   <GraduationCap className="h-5 w-5 text-primary" />

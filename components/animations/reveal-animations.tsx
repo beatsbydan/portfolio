@@ -18,23 +18,17 @@ interface AnimationProps {
   delay?: number
   duration?: number
   className?: string
-  // Renders at its final, settled state immediately instead of waiting on a
-  // scroll trigger — for elements mounted while display:none (e.g. an
-  // inactive tab rendered only for window.print()), whose scroll position
-  // never resolves so the entrance animation would otherwise never fire,
-  // printing invisible content.
-  skipAnimation?: boolean
 }
 
 // Fade In Animation - Enhanced for software engineer theme
-export function FadeIn({ children, delay = 0, duration = 0.8, className = "", skipAnimation = false }: AnimationProps) {
+export function FadeIn({ children, delay = 0, duration = 0.8, className = "" }: AnimationProps) {
   const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const element = elementRef.current
     if (!element) return
 
-    if (prefersReducedMotion() || skipAnimation) {
+    if (prefersReducedMotion()) {
       gsap.set(element, { opacity: 1, y: 0 })
       return
     }
@@ -62,7 +56,7 @@ export function FadeIn({ children, delay = 0, duration = 0.8, className = "", sk
     return () => {
       tween.kill()
     }
-  }, [delay, duration, skipAnimation])
+  }, [delay, duration])
 
   return (
     <div ref={elementRef} className={className}>
@@ -117,14 +111,14 @@ export function SlideInLeft({ children, delay = 0, duration = 0.8, className = "
 }
 
 // Slide In From Right - Smoother for clean design
-export function SlideInRight({ children, delay = 0, duration = 0.8, className = "", skipAnimation = false }: AnimationProps) {
+export function SlideInRight({ children, delay = 0, duration = 0.8, className = "" }: AnimationProps) {
   const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const element = elementRef.current
     if (!element) return
 
-    if (prefersReducedMotion() || skipAnimation) {
+    if (prefersReducedMotion()) {
       gsap.set(element, { opacity: 1, x: 0 })
       return
     }
@@ -152,7 +146,7 @@ export function SlideInRight({ children, delay = 0, duration = 0.8, className = 
     return () => {
       tween.kill()
     }
-  }, [delay, duration, skipAnimation])
+  }, [delay, duration])
 
   return (
     <div ref={elementRef} className={className}>
