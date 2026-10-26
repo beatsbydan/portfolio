@@ -31,7 +31,9 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { FadeIn, SlideInRight, StatusIndicator } from "@/components/animations/reveal-animations"
+import { ContactModal } from "@/components/contact-modal"
 
 const personalInfo = {
   name: "Daniel Onyeachonam",
@@ -200,6 +202,7 @@ const projects: {
 
 export default function ResumePage() {
   const [activeSection, setActiveSection] = useState("overview")
+  const [isContactOpen, setIsContactOpen] = useState(false)
 
   const sections = [
     { id: "overview", label: "Overview", icon: User },
@@ -555,8 +558,34 @@ export default function ResumePage() {
               </Card>
             </FadeIn>
           )}
+
+          {/* Call to Action */}
+          <FadeIn delay={0.2}>
+            <Card className="p-8 text-center bg-linear-to-r from-primary/5 to-accent/5 border-primary/20 print:hidden">
+              <div className="max-w-2xl mx-auto space-y-4">
+                <h2 className="text-2xl font-bold">Ready to Collaborate?</h2>
+                <p className="text-muted-foreground font-serif">
+                  I&apos;m always excited to work on challenging projects and collaborate with talented teams. Let&apos;s build
+                  something amazing together.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button size="lg" className="group" onClick={() => setIsContactOpen(true)}>
+                    <Terminal className="mr-2 h-4 w-4" />
+                    Initialize Contact
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <Link href="/portfolio">
+                      <Code className="mr-2 h-4 w-4" />
+                      View Projects
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </FadeIn>
         </div>
       </main>
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
 
       {/* Print Styles */}
       <style jsx global>{`
