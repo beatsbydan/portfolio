@@ -56,7 +56,7 @@ const commandResponses: Record<string, string | string[]> = {
     "DevOps: Docker, Kubernetes, Jenkins, GitLab CI, AWS, Digital Ocean."
   ],
   "experience": [
-    "Software Engineer - 3+ years",
+    "Software Engineer - 2+ years",
     "Specialized in full-stack development",
     "Built 15+ production applications",
     "Expertise in modern web technologies"

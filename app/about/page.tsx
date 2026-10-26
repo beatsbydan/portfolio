@@ -77,8 +77,8 @@ const achievements = [
 const terminalHistory = [
   "$ cat /etc/profile",
   "> Name: Daniel Onyeachonam",
-  "> Role: Software Engineer (Mid-Level)",
-  "> Experience: 3+ years, full-stack web development",
+  "> Role: Software Engineer",
+  "> Experience: 2+ years, full-stack web development",
   "$ ls skills/",
   "> frontend/ backend/ database/ devops/",
   "$ cat status.txt",

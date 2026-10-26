@@ -148,7 +148,7 @@ export function Navigation() {
                 <h2 className="font-bold text-sidebar-foreground">
                   <GlitchText text="Daniel Onyeachonam" />
                 </h2>
-                <p className="text-sm text-sidebar-foreground/70 font-serif">Software Engineer (Mid-Level)</p>
+                <p className="text-sm text-sidebar-foreground/70 font-serif">Software Engineer</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">

@@ -345,18 +345,20 @@ export default function ResumePage() {
                   <Card className="p-4 h-full flex flex-col">
                     <h3 className="font-semibold mb-4 flex items-center">
                       <Award className="h-4 w-4 mr-2 text-primary" />
-                      Quick Stats
+                      Highlights
                     </h3>
                     <div className="space-y-3 text-sm flex-1 flex flex-col justify-center">
                       <div className="flex justify-between">
-                        <span>Code Quality:</span>
-                        <Badge variant="outline" className="text-xs">
-                          A+
-                        </Badge>
+                        <span>Settlement volume:</span>
+                        <span className="text-primary font-mono">4.65M+/day</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Response Time:</span>
-                        <span className="text-green-500 font-mono">&lt; 24h</span>
+                        <span>Incidents resolved:</span>
+                        <span className="text-primary font-mono">20+</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Avg. turnaround:</span>
+                        <span className="text-green-500 font-mono">30 min</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Availability:</span>
