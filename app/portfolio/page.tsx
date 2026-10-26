@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Navigation } from "@/components/navigation"
 import { ProjectModal } from "@/components/project-modal"
 import { ContactModal } from "@/components/contact-modal"
@@ -45,6 +46,23 @@ interface Project {
   metrics?: Record<string, string>
 }
 
+// A scroll-triggered FadeIn/StaggerIn can get permanently stuck at its
+// pre-animation (invisible) state if the element is already past its
+// trigger point without GSAP ever catching an actual scroll "crossing" -
+// e.g. the page got shorter out from under it (switching grid/list view,
+// filtering by category) rather than the user scrolling past it. Reconcile
+// directly instead of relying on edge-crossing detection: anything already
+// behind the current scroll position gets fast-forwarded to its settled end
+// state, regardless of how it got there.
+function reconcileScrollTriggers() {
+  ScrollTrigger.getAll().forEach((trigger) => {
+    if (!trigger.animation) return
+    if (window.scrollY >= trigger.start && trigger.animation.progress() === 0) {
+      trigger.animation.progress(1)
+    }
+  })
+}
+
 export default function PortfolioPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -52,6 +70,24 @@ export default function PortfolioPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [isRunning, setIsRunning] = useState(true)
   const [isContactOpen, setIsContactOpen] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener("scroll", reconcileScrollTriggers, { passive: true })
+    return () => window.removeEventListener("scroll", reconcileScrollTriggers)
+  }, [])
+
+  // Switching grid/list or filtering by category changes the page's total
+  // height dramatically, so every trigger's start/end (cached from whenever
+  // it mounted) needs recalculating against the new layout - then reconciled
+  // immediately, since the layout change itself (not a scroll) may be what
+  // just carried an element past its own trigger point.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      ScrollTrigger.refresh()
+      reconcileScrollTriggers()
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [viewMode, selectedCategory])
 
   const categoryMap: Record<string, string[]> = {
     web: ["Web Applications"],
