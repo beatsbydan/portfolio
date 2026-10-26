@@ -23,7 +23,11 @@ import {
   Zap,
   Database,
   Server,
-  Globe,
+  Cloud,
+  Boxes,
+  Activity,
+  Monitor,
+  Sparkles,
 } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
@@ -31,8 +35,8 @@ import { FadeIn, SlideInRight, StatusIndicator } from "@/components/animations/r
 
 const personalInfo = {
   name: "Daniel Onyeachonam",
-  title: "Software Engineer (Mid-Level)",
-  location: "Remote / Global",
+  title: "Software Engineer",
+  location: "Lagos, Nigeria",
   phone: "+234 907 387 0133",
   email: "daniel.onyeachonam@outlook.com",
   github: "github.com/beatsbydan",
@@ -48,33 +52,60 @@ const techCategories: {
   borderColor: string
 }[] = [
   {
-    name: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    name: "Languages",
+    skills: ["Java", "TypeScript / JavaScript", "Python", "SQL"],
     icon: Code,
-    color: "text-blue-500",
-    borderColor: "border-t-blue-500",
+    color: "text-sky-500",
+    borderColor: "border-t-sky-500",
   },
   {
     name: "Backend",
-    skills: ["Node.js", "Express", "Spring Boot"],
+    skills: ["Spring Boot", "Node.js", "Express.js", "REST APIs", "Microservices", "Apache Kafka"],
     icon: Server,
     color: "text-green-500",
     borderColor: "border-t-green-500",
   },
   {
-    name: "Database",
-    skills: ["SQL", "Redis"],
+    name: "Data",
+    skills: ["PostgreSQL", "MySQL", "MSSQL", "Redis", "Supabase"],
     icon: Database,
     color: "text-purple-500",
     borderColor: "border-t-purple-500",
   },
   {
-    name: "DevOps",
-    skills: ["Docker", "Kubernetes", "CI/CD"],
-    familiar: ["AWS", "GCP"],
-    icon: Globe,
+    name: "Cloud",
+    skills: ["AWS", "GCP", "DigitalOcean"],
+    icon: Cloud,
+    color: "text-cyan-500",
+    borderColor: "border-t-cyan-500",
+  },
+  {
+    name: "DevOps & CI/CD",
+    skills: ["Docker", "Kubernetes", "Jenkins", "Harness", "GitLab CI", "Argo CD", "Git"],
+    icon: Boxes,
     color: "text-orange-500",
     borderColor: "border-t-orange-500",
+  },
+  {
+    name: "Observability",
+    skills: ["OpenTelemetry", "New Relic"],
+    icon: Activity,
+    color: "text-pink-500",
+    borderColor: "border-t-pink-500",
+  },
+  {
+    name: "Frontend",
+    skills: ["React", "Next.js", "React Native", "Tailwind CSS"],
+    icon: Monitor,
+    color: "text-blue-500",
+    borderColor: "border-t-blue-500",
+  },
+  {
+    name: "AI-Assisted Engineering",
+    skills: ["Claude Code (agentic development)", "Claude API (LLM integration)"],
+    icon: Sparkles,
+    color: "text-violet-500",
+    borderColor: "border-t-violet-500",
   },
 ]
 
@@ -93,52 +124,33 @@ const certifications: Certification[] = []
 
 const workHistory = [
   {
-    company: "Tech Solutions Inc.",
-    location: "Remote",
-    period: "2023 - Present",
+    company: "Moniepoint Inc.",
+    location: "Lagos, Nigeria",
+    period: "02/2024 - Present",
     positions: [
       {
-        title: "Senior Full-Stack Developer",
-        duration: "8 months",
+        title: "Backend Engineer",
+        duration: "09/2025 - Present",
         achievements: [
-          "Led development of scalable applications serving 50,000+ users",
-          "Architected microservices improving performance by 40%",
-          "Mentored 5 junior developers and established coding standards",
-          "Delivered user-centric features ahead of schedule",
+          "Re-architected transaction report generation into an asynchronous streaming pipeline that processes 20M+ records per run at a constant memory footprint, slashing generation time from over an hour to 2-5 minutes and eliminating out-of-memory failures in production",
+          "Boosted settlement throughput by over 90% by profiling the settlement pipeline, eliminating processing bottlenecks, and optimising queries and indexes on high-volume tables",
+          "Co-designed and delivered a re-engineered Settlement Agent, migrating its event messaging from Apache Kafka to Redis Streams to meet new product requirements while sustaining 4.65M+ settlement records per day for interbank partner transfers",
+          "Co-designed and shipped Reversals & Refunds across the transaction-processing flow, leading impact analysis and technical deep-dives across 2 cross-functional teams, co-authoring QA test cases, and driving the feature through to production",
+          "Introduced end-to-end observability across 4 services with OpenTelemetry and New Relic (distributed tracing, metrics, dashboards, and alerting), cutting incident detection time from hours to minutes",
+          "Resolved 20+ production incidents end to end, from root-cause analysis to fix and follow-up, with an average turnaround of 30 minutes, strengthening platform stability and partner trust",
+          "Stepped in as frontend engineer (React, TypeScript) during a frontend staffing gap, building UI features and integrating them with backend APIs to keep releases on schedule",
+          "Mentored 2 junior engineers and interns and reviewed pull requests, raising the bar on code quality, testing, and service design",
         ],
       },
-    ],
-  },
-  {
-    company: "Digital Agency Co.",
-    location: "Remote",
-    period: "2021 - 2022",
-    positions: [
       {
-        title: "Full-Stack Developer",
-        duration: "1.5 years",
+        title: "Backend Engineer Intern",
+        duration: "02/2024 - 08/2024",
         achievements: [
-          "Built RESTful APIs reducing manual processes by 60%",
-          "Implemented CI/CD pipelines decreasing deployment time by 50%",
-          "Optimized database queries improving load times by 35%",
-          "Maintained multiple client-facing applications",
-        ],
-      },
-    ],
-  },
-  {
-    company: "StartupXYZ",
-    location: "Remote",
-    period: "2020 - 2021",
-    positions: [
-      {
-        title: "Frontend Developer",
-        duration: "1 year",
-        achievements: [
-          "Created responsive interfaces with React and TypeScript",
-          "Collaborated with designers for pixel-perfect implementations",
-          "Integrated frontend with backend APIs effectively",
-          "Contributed to development workflows and documentation",
+          "Built and launched the Family Businesses case-study website end to end, integrating Google Analytics for user-behaviour tracking and the Google Sheets API for automated data collection",
+          "Engineered a SendGrid-powered mailing service that delivers the case study on demand and captures recipient data, reducing communication delays by 20-50%",
+          "Developed and tested scalable RESTful APIs and shipped new features across a fault-tolerant microservices architecture, backed by end-to-end tests and robust error handling",
+          "Delivered responsive frontend features integrated with backend APIs, owning delivery from UI to service",
+          "Contributed to QA sessions, code audits, and design deep-dives for new features, helping cut bugs by over 80% on owned services",
         ],
       },
     ],
@@ -276,10 +288,12 @@ export default function ResumePage() {
                       <div>
                         <h3 className="font-semibold mb-2">Professional Summary</h3>
                         <p className="text-muted-foreground font-serif leading-relaxed">
-                          Passionate software engineer with 3+ years of experience building scalable web applications
-                          and APIs. Expertise in modern JavaScript frameworks, backend development, and cloud
-                          technologies. Proven track record of delivering high-quality solutions that improve user
-                          experience and business outcomes.
+                          Software Engineer with 2+ years of professional experience designing, developing and
+                          maintaining robust software solutions across the application stack. Experienced in
+                          building scalable backend services, intuitive client-side applications and efficient
+                          data-driven systems, with a strong foundation in software architecture, database
+                          engineering and cloud-native technologies. Passionate about writing clean, maintainable
+                          code and engineering reliable solutions that solve real-world problems.
                         </p>
                       </div>
 
@@ -289,7 +303,7 @@ export default function ResumePage() {
                           <div className="text-xs text-muted-foreground">Projects Shipped</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-primary">3+</div>
+                          <div className="text-2xl font-bold text-primary">2+</div>
                           <div className="text-xs text-muted-foreground">Years Experience</div>
                         </div>
                       </div>
