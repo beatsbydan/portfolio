@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
@@ -14,7 +15,6 @@ import {
   Mail,
   Menu,
   X,
-  Code,
   ChevronRight,
   Github,
   Linkedin,
@@ -141,8 +141,8 @@ export function Navigation() {
         <div className="border-b border-sidebar-border p-6">
           <div className="space-y-3">
             <div className="flex items-center space-x-3">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                <Code className="h-4 w-4 text-primary" />
+              <div className="h-10 w-10 shrink-0 rounded-xl overflow-hidden border border-primary/20">
+                <Image src="/logo.png" alt="Daniel Onyeachonam logo" width={40} height={40} className="h-full w-full object-cover" />
               </div>
               <div>
                 <h2 className="font-bold text-sidebar-foreground">
