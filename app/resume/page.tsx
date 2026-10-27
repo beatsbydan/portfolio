@@ -198,6 +198,12 @@ const projects: {
     githubUrl: "https://github.com/beatsbydan/pitwall",
     metrics: { mae: "2.021s", "win probability": "99.8%", laps: "62,311" },
   },
+  {
+    name: "GiftDrop",
+    type: "Social Gifting Platform (API + Web + Mobile)",
+    status: "Paused",
+    tech: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "TypeScript", "React Native"],
+  },
 ]
 
 export default function ResumePage() {

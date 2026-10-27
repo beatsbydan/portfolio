@@ -280,6 +280,37 @@ export default function PortfolioPage() {
         "training laps": "62,311 across 2022–24",
       },
     },
+    {
+      id: "5",
+      title: "GiftDrop",
+      description:
+        "A social gifting platform — wishlists, gifters, and time-boxed gifting windows — built as a Spring Boot API, a React web client, and a React Native mobile app.",
+      longDescription:
+        "GiftDrop connects people with curated wishlists to gifters who want to fund them directly, built across three coordinated codebases: a Spring Boot API, a React web client (landing site, admin panel, and a consumer web experience), and a React Native/Expo mobile app for wishers and gifters. The backend runs on virtual threads with a Liquibase-managed PostgreSQL schema, Redisson-backed Redis for cache-aside query caching, refresh-token rotation, OTP storage and Bucket4j-distributed rate limiting, and ShedLock to keep cron jobs (payment reconciliation, abandoned-checkout cleanup, metric rollups, Excel report generation, mail dispatch) from double-running across instances. Paystack handles payments end to end — hosted checkout on web, an in-app WebView checkout on mobile — with HMAC-SHA512 webhook verification and a database-level unique constraint absorbing duplicate webhook deliveries. The web client runs two fully separate RTK Query auth stacks for admin and consumer sessions (distinct cookies, caches, and mutex-guarded token refresh) synced across browser tabs via BroadcastChannel, while the mobile app adds biometric quick-login and SecureStore-backed refresh tokens on top of the same API.",
+      image: "/projects/giftdrop.jpg",
+      technologies: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "TypeScript", "React Native", "Paystack"],
+      category: "Full-Stack Projects",
+      year: "2026",
+      status: "Paused",
+      features: [
+        "Paystack checkout on both web (hosted redirect) and mobile (in-app WebView, detecting completion by watching for Paystack's own trxref/reference params during navigation) — verified server-side via HMAC-SHA512 webhook signatures and made idempotent with a DB-level unique constraint on the payment reference",
+        "Redis (Redisson) backing refresh-token rotation, OTP storage, cache-aside query caching, and Bucket4j distributed rate limiting across three tiers — fails open rather than blocking traffic if Redis itself goes down",
+        "ShedLock-coordinated cron jobs so payment reconciliation, abandoned-checkout cleanup, metric rollups, Excel report generation (Apache POI, to local disk or an S3-compatible bucket), and mail dispatch each run exactly once across instances, not per-instance",
+        "Two fully independent auth stacks on the web client — separate Redux slices, RTK Query caches, cookies, and mutex-guarded refresh-and-retry logic for admin vs. consumer sessions — kept in sync across browser tabs via the BroadcastChannel API",
+        "React Native consumer app with biometric quick-login (Face ID/Touch ID via expo-local-authentication) and SecureStore-held refresh tokens, mirroring the web client's auth model without sharing its cookie-based mechanism",
+        "Durable, DB-backed email queue (not fire-and-forget) dispatched through Resend with Thymeleaf-rendered templates, and virtual-thread request handling throughout the API",
+      ],
+      challenges: [
+        "Running one coherent checkout flow across three independent clients — web admin, web consumer, and mobile — each with its own auth stack and no shared session state",
+        "Confirming Paystack payments reliably against retried and duplicate webhook deliveries — solved with HMAC-SHA512 signature verification plus a DB-level unique constraint that safely absorbs a race between two concurrent deliveries for the same reference",
+        "Detecting payment completion inside a mobile WebView with no native payment SDK and no server-side callback_url configured — worked around by watching WebView navigation for Paystack's own trxref/reference query params and cancelling the load the moment they appear",
+        "Coordinating scheduled jobs (reconciliation, cleanup, reporting) safely across multiple server instances using DB-backed ShedLock rather than relying on in-memory scheduling that breaks the moment there's more than one instance",
+      ],
+      results: [
+        "Shipped all three layers as a working, end-to-end product — backend API, web client, and native mobile app — sharing one real payment and auth model across all of them",
+        "Previously deployed to a production droplet at giftdrop.me; the deployment has since been paused",
+      ],
+    },
   ]
 
   const projectStats = {
