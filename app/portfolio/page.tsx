@@ -395,10 +395,10 @@ export default function PortfolioPage() {
 
         <div className="p-6 space-y-6">
           {/* Project Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* File Explorer Sidebar */}
-            <div className="lg:col-span-1 lg:sticky lg:top-6">
-              <FadeIn>
+            <div className="lg:col-span-1">
+              <FadeIn className="lg:sticky lg:top-6">
                 <Card className="p-4">
                   <div className="flex items-center space-x-2 mb-4">
                     <Terminal className="h-4 w-4 text-primary" />
