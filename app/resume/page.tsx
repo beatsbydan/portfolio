@@ -200,9 +200,9 @@ const projects: {
   },
   {
     name: "GiftDrop",
-    type: "Social Gifting Platform (API + Web + Mobile)",
+    type: "Social Gifting Platform (API + Web)",
     status: "Paused",
-    tech: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "TypeScript", "React Native"],
+    tech: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "TypeScript"],
   },
 ]
 
