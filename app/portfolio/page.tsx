@@ -309,6 +309,44 @@ export default function PortfolioPage() {
         "Previously deployed to a production droplet at giftdrop.me; the deployment has since been paused",
       ],
     },
+    {
+      id: "6",
+      title: "LedgerCore",
+      description:
+        "A double-entry ledger and settlement engine proving correctness under real concurrent load — zero double-spends, zero overdrafts, zero lost events.",
+      longDescription:
+        "LedgerCore is a Java/Spring Boot engine built to prove, not just claim, that a transfer can move money between two accounts under concurrency without ever corrupting the books. Double-entry invariants are enforced at the database level with a deferred PostgreSQL constraint trigger that rejects any unbalanced journal, plus immutability triggers that reject every UPDATE or DELETE on a posted entry — corrections only happen as reversal entries. Concurrent transfers use pessimistic row locking with ascending-account-ID lock ordering to stay deadlock-free, idempotency spans three separate transactions (claim, execute, finalize) so a racing duplicate request can never double-execute, and every journal write lands in a transactional outbox relayed to Kafka by a scheduled poller using SELECT ... FOR UPDATE SKIP LOCKED. A nightly reconciliation job streams the ledger against a bank statement feed through a constant-memory sort-merge join. All of it is verified, not just asserted: 29 tests run against real Testcontainers Postgres and Kafka, including dedicated tests that hammer transfers, idempotency keys, and outbox delivery with real concurrent threads, and a k6 load test that sustained 219.6 transfers/sec with zero balance drift across 28,733 transfers.",
+      image: "/projects/generic-api.jpg",
+      technologies: ["Java", "Spring Boot", "PostgreSQL", "Apache Kafka", "Liquibase", "Testcontainers", "k6"],
+      category: "APIs & Backend",
+      year: "2026",
+      status: "Complete",
+      features: [
+        "Double-entry invariants enforced at the database level — a deferred PostgreSQL constraint trigger rejects any unbalanced journal at commit, and separate immutability triggers reject any UPDATE or DELETE on a posted entry, so corrections only happen as reversal entries",
+        "Deadlock-free concurrent transfers via pessimistic row locking with ascending-account-ID lock ordering, implemented independently on both the transfer and reversal code paths",
+        "Three-phase idempotency (claim → execute → finalize) spanning separate transactions by construction, with SHA-256 request fingerprinting and atomic reclaim of stale or failed in-flight claims",
+        "Transactional outbox: the outbox row is written in the same transaction as the journal entry, then relayed to Kafka by a separate scheduled poller using SELECT ... FOR UPDATE SKIP LOCKED for safe multi-consumer delivery",
+        "Nightly reconciliation against a bank statement feed via a constant-memory sort-merge join — a Hibernate server-side cursor (fetch-size query hint) streams both sides and mismatches one at a time rather than materializing a result set",
+        "Verified under real contention, not just unit-tested — 29 tests against real Testcontainers Postgres and Kafka, including concurrent-transfer, concurrent-idempotency, and concurrent-outbox-publish tests asserting zero balance drift and zero duplicate delivery",
+      ],
+      challenges: [
+        "Caught a real lost-update bug where Hibernate's session identity map returned a stale in-memory entity instead of the freshly row-locked one — fixed by fetching a scalar ID rather than the entity before acquiring the lock",
+        "Making duplicate concurrent requests on the same idempotency key resolve to exactly one transfer, without one request's in-flight claim deadlocking against or double-executing alongside another's",
+        "Keeping the outbox relay's Kafka delivery failures from rolling back already-published rows in the same batch — solved with a per-row try/catch instead of one transaction per batch",
+        "Reconciling a ledger against an external bank feed in constant memory instead of loading both sides in full, while still tolerating malformed statement lines without aborting the run",
+      ],
+      results: [
+        "k6 load test sustained 219.6 transfers/sec with p90 377ms / p95 591ms latency and zero balance drift across 28,733 transfers — 100 seeded accounts, total balance identical before and after",
+        "29 tests passing against real Testcontainers Postgres and Kafka, including dedicated concurrency tests for transfers, idempotency, and outbox delivery under real thread contention",
+        "Full architecture, every key flow, and the database schema documented as a set of Mermaid diagrams alongside a complete product/design document",
+      ],
+      githubUrl: "https://github.com/beatsbydan/ledger-core",
+      metrics: {
+        throughput: "219.6 transfers/sec",
+        latency: "p95 591ms / p90 377ms",
+        "balance drift": "0 across 28,733 transfers",
+      },
+    },
   ]
 
   const projectStats = {

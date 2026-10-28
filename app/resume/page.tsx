@@ -204,6 +204,14 @@ const projects: {
     status: "Paused",
     tech: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "TypeScript"],
   },
+  {
+    name: "LedgerCore",
+    type: "Double-Entry Ledger & Settlement Engine",
+    status: "Complete",
+    tech: ["Java", "Spring Boot", "PostgreSQL", "Apache Kafka", "Liquibase", "Testcontainers"],
+    githubUrl: "https://github.com/beatsbydan/ledger-core",
+    metrics: { throughput: "219.6 tx/sec", drift: "0 across 28,733 transfers" },
+  },
 ]
 
 export default function ResumePage() {
