@@ -212,6 +212,13 @@ const projects: {
     githubUrl: "https://github.com/beatsbydan/ledger-core",
     metrics: { throughput: "219.6 tx/sec", drift: "0 across 28,733 transfers" },
   },
+  {
+    name: "Almanac",
+    type: "University Course-Timetabling System (Final-Year Project)",
+    status: "Complete",
+    tech: ["Spring Boot", "Java", "PostgreSQL", "React", "TypeScript", "Python", "OR-Tools"],
+    githubUrl: "https://github.com/beatsbydan/almanac",
+  },
 ]
 
 export default function ResumePage() {

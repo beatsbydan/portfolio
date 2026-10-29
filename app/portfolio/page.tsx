@@ -347,6 +347,39 @@ export default function PortfolioPage() {
         "balance drift": "0 across 28,733 transfers",
       },
     },
+    {
+      id: "7",
+      title: "Almanac",
+      description:
+        "A university course-timetabling system — a Spring Boot API, a React client, and a real OR-Tools constraint solver — built as my final-year project, then hardened with real concurrency testing after submission.",
+      longDescription:
+        "Almanac is a university course-timetabling system I built as my final-year project: a Spring Boot API, a React admin/student client, and — added after submission — a Python microservice that solves room/day/time conflicts with Google OR-Tools' CP-SAT solver instead of randomized sampling. After graduating, I put it through a real concurrency-hardening pass driven by k6 load testing. That testing found a genuine lost-update race — two concurrent schedule-creation requests for the same course both succeeding — fixed with a course-scoped Redisson lock plus a database unique constraint as defense-in-depth; the identical unprotected check-then-create race turned out to exist in every entity-creation flow (user registration, colleges, departments, courses) and got the same treatment across all of them. Multi-tenancy was added in the same pass — a request-scoped tenant resolver backed by Hibernate's row-level @TenantId filtering, verified by a 180-request test across two tenants that specifically targets the ThreadLocal-leak failure mode a single-threaded test can't catch. The datasource was also live-migrated from MySQL to PostgreSQL mid-project.",
+      image: "/projects/almanac.jpg",
+      technologies: ["Spring Boot", "Java", "PostgreSQL", "React", "TypeScript", "Redis", "Python", "OR-Tools"],
+      category: "Full-Stack Projects",
+      year: "2025–2026",
+      status: "Complete",
+      features: [
+        "A real CP-SAT constraint solver (Google OR-Tools, behind a Python/FastAPI microservice) assigns every class session to a conflict-free room/day/time slot — hard constraints over room capacity, teacher double-booking, and participant-group overlap, not randomized trial-and-error sampling",
+        "A genuine lost-update race found via k6 load testing — concurrent schedule-creation requests for the same course both succeeding — fixed with a course-scoped Redisson distributed lock plus a database unique constraint as defense-in-depth, then covered by a real multi-threaded test",
+        "The same check-then-create race existed in every entity-creation flow (user registration, colleges, departments, courses); found and fixed identically across all of them, each backed by a dedicated concurrency test asserting exactly one row survives",
+        "Multi-tenancy added after the original submission: a request-scoped tenant resolver backed by Hibernate row-level @TenantId filtering, verified by a 180-request test across two tenants targeting the ThreadLocal-leak failure mode a single-threaded test structurally can't catch",
+        "Generated timetables render as real .docx documents (Apache POI), produced in resumable stages by a ShedLock-guarded cron so a multi-instance deployment never double-generates",
+        "Live-migrated the datasource from MySQL to PostgreSQL mid-project, fixing schema issues Postgres's stricter constraint-naming rules exposed along the way",
+      ],
+      challenges: [
+        "Diagnosing a lost-update bug caused by Hibernate's session identity map silently returning a stale entity instead of the one just row-locked — fixed by fetching a scalar ID ahead of the lock instead of the managed entity",
+        "Closing the same unprotected check-then-create race across four different entity-creation flows without four slightly-different fixes",
+        "Right-sizing Redisson and the task scheduler after a threaddump during load testing found Redisson alone idle-holding 44 of 81 live threads, and a task scheduler sized for ten jobs running exactly one",
+        "Verifying real tenant isolation rather than trusting it — the integration test harness's bare MockMvc setup turned out to skip the tenant-resolution filter entirely, so every earlier controller test had been silently passing against a bootstrap fallback, not real per-request tenant resolution",
+      ],
+      results: [
+        "27 commits across two phases: the original final-year build, then a concurrency-hardening and multi-tenancy pass after graduation",
+        "Multiple real races found via k6 load testing and fixed at both the application and database level, each covered by a dedicated multi-threaded test",
+        "A working, non-mocked pipeline from constraint-solved generation through to a downloadable per-user timetable document",
+      ],
+      githubUrl: "https://github.com/beatsbydan/almanac",
+    },
   ]
 
   const projectStats = {
