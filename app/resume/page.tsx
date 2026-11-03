@@ -219,6 +219,14 @@ const projects: {
     tech: ["Spring Boot", "Java", "PostgreSQL", "React", "TypeScript", "Python", "OR-Tools"],
     githubUrl: "https://github.com/beatsbydan/almanac",
   },
+  {
+    name: "Portcullis",
+    type: "Interbank Clearing + Hybrid Fraud Detection System",
+    status: "Complete",
+    tech: ["Java", "Spring Boot", "Python", "LightGBM", "PostgreSQL", "FastAPI", "Next.js", "TypeScript"],
+    githubUrl: "https://github.com/beatsbydan/portcullis",
+    metrics: { "avg precision": "0.185 (holdout)", "fraud caught": "12.8% @ 1% false-alarm" },
+  },
 ]
 
 export default function ResumePage() {

@@ -380,6 +380,44 @@ export default function PortfolioPage() {
       ],
       githubUrl: "https://github.com/beatsbydan/almanac",
     },
+    {
+      id: "8",
+      title: "Portcullis",
+      description:
+        "A two-bank interbank clearing system defended by a hybrid rules-and-ML fraud engine, trained on the real IEEE-CIS Fraud Detection dataset with a cross-bank entity graph and SHAP-style explanations.",
+      longDescription:
+        "Portcullis merges three originally separate portfolio projects into one system: an unmodified double-entry ledger (LedgerCore) running as two simulated banks, a Postgres-backed rules engine, and a Python/FastAPI fraud model with explainability. Every purchase is scored by a defense combiner that takes the stricter of two independent verdicts — a rules engine (blocklist, new-customer cap, amount-anomaly, velocity) and a LightGBM classifier — before a single ledger entry is written, then clears through a uniform two-leg saga (cardholder → issuing bank's clearing account → acquiring bank's clearing account → merchant) using nothing but LedgerCore's existing transfer API; a failed second leg compensates with a second, opposite-direction transfer rather than a database rollback, since LedgerCore's journal entries are immutable by design. A cross-bank entity graph (cards, devices, merchants as nodes, time-decayed edges with a one-week half-life) runs personalized PageRank seeded on confirmed-fraud nodes to give every node a continuous fraud-exposure score, with a strict snapshot_before(as_of) boundary gating both edges and fraud labels by timestamp so a training row can never see the future. An analyst console surfaces a risk-sorted case queue with LightGBM-native SHAP-style explanations, a hand-rolled SVG cross-bank relationship graph, and labeling actions that feed a scheduled maturation job back toward the training loop.",
+      image: "/projects/portcullis.jpg",
+      technologies: ["Java", "Spring Boot", "Python", "LightGBM", "PostgreSQL", "FastAPI", "Next.js", "TypeScript", "NetworkX"],
+      category: "Full-Stack Projects",
+      year: "2026",
+      status: "Complete",
+      features: [
+        "Two-leg saga clearing reusing an unmodified LedgerCore ledger as two simulated banks — same-bank and cross-bank purchases use the identical cardholder → issuing clearing account → acquiring clearing account → merchant pattern, with every leg persisted as independent SagaState transitions",
+        "A defense combiner merges a pure-Postgres rules engine with a LightGBM model served over FastAPI, taking whichever verdict is stricter (decline beats step-up beats approve) — and falls back to the rules-only verdict, logged, if the model server is unreachable",
+        "A cross-bank entity graph scores fraud exposure via personalized PageRank over time-decayed card/device/merchant edges (one-week half-life), with a snapshot_before(as_of) boundary that time-gates both edges and fraud-confirmation labels so a feature can never see the future — covered by tests specifically engineered to catch that exact leakage",
+        "SHAP-style explanations come from LightGBM's own native pred_contrib, not the shap package — bypassed entirely after hitting a real shap/LightGBM version incompatibility",
+        "An analyst console: a risk-sorted case queue (a NULLS LAST query so rules-only cases don't get buried behind model-scored ones), SHAP factor bars, a hand-rolled SVG cross-bank relationship panel, and confirm/deny labeling actions that feed a scheduled label-maturation job",
+        "A checkout simulator with four seeded test cards exercising every verdict path, an ops dashboard polling live clearing balances and a verdict-mix feed, and a flash-free, SSR-safe dark/light theme toggle",
+      ],
+      challenges: [
+        "A silent train/serve-skew-shaped leakage bug in the evaluation code itself — an earlier evaluate() was independently re-tuning its own thresholds from the holdout's own labels. Fixed by threading validation-tuned thresholds explicitly into the holdout call, now locked in by a regression test that fails if the self-tuning bug ever comes back",
+        "A real shap/LightGBM version incompatibility (AttributeError: 'list' object has no attribute 'shape') — fixed by bypassing the shap package entirely and calling LightGBM's own native booster_.predict(X, pred_contrib=True), which already is TreeSHAP",
+        "A seeded-history idempotency gap — the checkout demo's synthetic step-up test-card history was silently re-added on every restart by an in-memory dedup set that resets every JVM start, slowly drifting the amount-anomaly rule. Fixed by checking real saga history before seeding instead of the transient in-memory set",
+        ".iterrows() was the real bottleneck building the entity graph at 590K rows, not an obvious one — switching to .to_dict(\"records\") cut the sanity-run time by roughly 40% and let the full training run complete cleanly",
+      ],
+      results: [
+        "0.185 average precision on a genuine 88,581-row time-ordered holdout (~5.3× a random baseline at this fraud rate) — computed by threading validation-tuned thresholds into holdout evaluation rather than letting evaluation retune against its own labels",
+        "Catches 12.8% of fraud at a 1%-false-alarm budget; the entity graph alone is a measured, not assumed, contributor — +0.018 average precision versus the same model with its exposure features zeroed out",
+        "49/49 Java tests (JUnit + Testcontainers Postgres), 36/36 Python tests (pytest), 7/7 frontend tests (Vitest) — independently re-run, not just counted",
+      ],
+      githubUrl: "https://github.com/beatsbydan/portcullis",
+      metrics: {
+        "average precision": "0.185 (holdout)",
+        "fraud caught": "12.8% @ 1% false-alarm",
+        "graph lift": "+0.018 avg precision",
+      },
+    },
   ]
 
   const projectStats = {
