@@ -477,14 +477,30 @@ h1.hero-title em {
   color: var(--ink-soft);
 }
 .tag {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-family: var(--font-body), sans-serif;
   font-weight: 500;
-  padding: 0.25rem 0.6rem;
+  padding: 0.38rem 0.8rem;
   border-radius: 100px;
   border: 1px solid var(--line);
+  background: var(--bg2);
   color: var(--ink-soft);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+/* proof-number chips: bolder and inverted, so the metrics that actually
+   matter (throughput, accuracy, scale) read as the payoff, not just
+   another tag in the row next to the tech stack */
+.tag-stat {
+  font-size: 0.74rem;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 500;
+  padding: 0.45rem 0.9rem;
+  border-radius: 100px;
+  background: var(--inv-bg);
+  color: var(--inv-ink);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
 }
 
 /* ---------- scroll reveals ---------- */

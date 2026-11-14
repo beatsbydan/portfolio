@@ -785,7 +785,7 @@ export default function HomePage() {
                   <p className="exp-desc">{exp.desc}</p>
                   <div className="exp-metrics">
                     {exp.metrics.map((m) => (
-                      <span className="tag" key={m}>
+                      <span className="tag-stat" key={m}>
                         {m}
                       </span>
                     ))}
@@ -898,7 +898,7 @@ export default function HomePage() {
                     <span className="modal-label">Highlights</span>
                     <div className="modal-metrics">
                       {activeProject.metrics.map((m) => (
-                        <span className="tag" key={m}>
+                        <span className="tag-stat" key={m}>
                           {m}
                         </span>
                       ))}
