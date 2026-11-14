@@ -900,9 +900,6 @@ h1.hero-title em {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  .about-photo {
-    max-width: 260px;
-  }
 }
 
 /* ---------- experience ---------- */
