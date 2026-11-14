@@ -15,8 +15,9 @@ interface Project {
   pattern: "dots" | "diagonal" | "grid" | "cross" | "circles"
   desc: string
   tech: string[]
-  metrics: string[]
+  metrics?: string[]
   link: string | null
+  linkType?: "github" | "live"
   linkLabel?: string
 }
 
@@ -42,6 +43,7 @@ const projects: Project[] = [
     tech: ["Java", "Spring Boot", "Python", "LightGBM", "FastAPI", "Next.js"],
     metrics: ["0.185 avg precision (holdout)", "12.8% fraud caught @ 1% false-alarm"],
     link: "https://github.com/beatsbydan/portcullis",
+    linkType: "github",
     linkLabel: "View on GitHub",
   },
   {
@@ -55,6 +57,7 @@ const projects: Project[] = [
     tech: ["Java", "Spring Boot", "PostgreSQL", "Apache Kafka", "Testcontainers"],
     metrics: ["219.6 transfers/sec sustained", "Zero balance drift across 28,733 transfers"],
     link: "https://github.com/beatsbydan/ledger-core",
+    linkType: "github",
     linkLabel: "View on GitHub",
   },
   {
@@ -66,8 +69,8 @@ const projects: Project[] = [
     pattern: "dots",
     desc: "An AI-powered monitoring & evaluation platform that turns raw survey data into boardroom-ready impact reports for NGOs and impact-driven organizations.",
     tech: ["Next.js", "React", "Supabase", "OpenAI API", "Google Forms API"],
-    metrics: ["AI metric-generation → Google Forms → AI report, end to end"],
     link: "https://v0-metric-leap-design.vercel.app/",
+    linkType: "live",
     linkLabel: "Visit Live Site",
   },
   {
@@ -81,6 +84,7 @@ const projects: Project[] = [
     tech: ["Python", "LightGBM", "FastF1", "Next.js", "WebSockets"],
     metrics: ["2.021s MAE on held-out laps", "99.8% win probability, real strategy comparison"],
     link: "https://github.com/beatsbydan/pitwall",
+    linkType: "github",
     linkLabel: "View on GitHub",
   },
   {
@@ -94,6 +98,7 @@ const projects: Project[] = [
     tech: ["Node.js", "Express", "PostgreSQL", "Redis", "BullMQ", "Paystack"],
     metrics: ["15,000+ orders fulfilled", "50,000+ livestock across 37 states"],
     link: "https://farmzone.africa",
+    linkType: "live",
     linkLabel: "Visit Live Site",
   },
   {
@@ -105,7 +110,6 @@ const projects: Project[] = [
     pattern: "dots",
     desc: "A social gifting platform connecting curated wishlists to gifters — a Spring Boot API running on virtual threads paired with a React web client covering landing, admin and consumer experiences.",
     tech: ["Spring Boot", "Java", "PostgreSQL", "Redis", "React", "Paystack"],
-    metrics: ["Two fully isolated auth stacks (admin / consumer)", "ShedLock-coordinated cron jobs across instances"],
     link: null,
   },
   {
@@ -117,8 +121,8 @@ const projects: Project[] = [
     pattern: "grid",
     desc: "A university course-timetabling system — a Spring Boot API, a React client, and a real Google OR-Tools CP-SAT solver assigning conflict-free room/day/time slots instead of random sampling.",
     tech: ["Spring Boot", "Java", "PostgreSQL", "React", "Python", "OR-Tools"],
-    metrics: ["27 commits across two hardening phases", "Multi-tenant, verified via a 180-request concurrency test"],
     link: "https://github.com/beatsbydan/almanac",
+    linkType: "github",
     linkLabel: "View on GitHub",
   },
   {
@@ -130,8 +134,8 @@ const projects: Project[] = [
     pattern: "circles",
     desc: "A public artist site and a protected admin CMS for touring DJ/producer Tobi Peter — an interactive tour map, a full content dashboard, and a client continuously modernized since 2023.",
     tech: ["React", "Vite", "TanStack Query", "Tailwind CSS", "Framer Motion"],
-    metrics: ["Live since 2023 — 148+ commits", "Migrated CRA → Vite, Redux → TanStack Query, zero downtime"],
     link: "https://www.tobipeter.com",
+    linkType: "live",
     linkLabel: "Visit Live Site",
   },
 ]
@@ -171,6 +175,14 @@ function ArrowIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none">
       <path d="M7 17 17 7M7 7h10v10" />
+    </svg>
+  )
+}
+
+function GithubIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.95.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.07.78 2.15 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.8.56A10.5 10.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" />
     </svg>
   )
 }
@@ -894,16 +906,18 @@ export default function HomePage() {
                       ))}
                     </div>
                   </div>
-                  <div className="modal-group">
-                    <span className="modal-label">Highlights</span>
-                    <div className="modal-metrics">
-                      {activeProject.metrics.map((m) => (
-                        <span className="tag-stat" key={m}>
-                          {m}
-                        </span>
-                      ))}
+                  {activeProject.metrics && activeProject.metrics.length > 0 && (
+                    <div className="modal-group">
+                      <span className="modal-label">Highlights</span>
+                      <div className="modal-metrics">
+                        {activeProject.metrics.map((m) => (
+                          <span className="tag-stat" key={m}>
+                            {m}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   {activeProject.link && (
                     <a
                       href={activeProject.link}
@@ -911,9 +925,9 @@ export default function HomePage() {
                       rel="noopener noreferrer"
                       className="modal-link"
                       data-hover="true"
+                      aria-label={activeProject.linkLabel || "Visit"}
                     >
-                      {activeProject.linkLabel || "Visit"}
-                      <ArrowIcon />
+                      {activeProject.linkType === "github" ? <GithubIcon /> : <ArrowIcon />}
                     </a>
                   )}
                 </div>

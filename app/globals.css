@@ -795,17 +795,17 @@ h1.hero-title em {
 .modal-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  padding: 0.75rem 1.3rem;
-  border-radius: 100px;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   background: var(--inv-bg);
   color: var(--inv-ink);
   margin-top: 0.3rem;
 }
 .modal-link svg {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 .modal-close {
   position: absolute;
