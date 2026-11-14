@@ -566,7 +566,12 @@ export default function HomePage() {
       })
       tl.to(".loader", { yPercent: -100, duration: 0.9, ease: "power4.inOut" })
         .set(".loader", { display: "none" })
-        .from(".nav", { y: -40, opacity: 0, duration: 0.6, ease: "power3.out" }, "-=.3")
+        // the loader (translateY(-100%)) uncovers the screen from the
+        // bottom edge upward, so the nav at the very top is the last thing
+        // revealed — starting its slide-down early (overlapping the loader
+        // tween) meant it was mostly finished by the time it became visible.
+        // Start it only once the loader is actually gone.
+        .from(".nav", { y: -40, opacity: 0, duration: 0.6, ease: "power3.out" })
         .from(".hero-eyebrow", { opacity: 0, y: 10, duration: 0.5 }, "-=.3")
         .from(".hero-line span", { yPercent: 115, duration: 0.9, ease: "power4.out", stagger: 0.08 }, "-=.2")
         .from(".hero-sub", { opacity: 0, y: 16, duration: 0.6 }, "-=.4")
