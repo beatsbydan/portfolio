@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 
 const BASE_URL = "https://chonam.dev"
-const routes = ["", "/about", "/resume", "/portfolio"]
+const routes = [""]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
