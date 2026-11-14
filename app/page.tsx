@@ -449,6 +449,13 @@ export default function HomePage() {
     }
 
     const onWheel = (e: WheelEvent) => {
+      // only take over once the gallery is roughly centered in the viewport
+      // (its vertical midpoint has scrolled to about the middle of the
+      // screen) — otherwise let the page keep scrolling normally into view
+      const rect = gallery!.getBoundingClientRect()
+      const viewportMid = window.innerHeight / 2
+      if (rect.top > viewportMid || rect.bottom < viewportMid) return
+
       const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
       const max = gallery!.scrollWidth - gallery!.clientWidth
       const atStart = gallery!.scrollLeft <= 0
@@ -589,7 +596,7 @@ export default function HomePage() {
           <div className="loader-label">
             Daniel Onyeachonam
             <br />
-            Portfolio — v2
+            Portfolio
           </div>
           <div className="loader-label">Loading assets</div>
         </div>
