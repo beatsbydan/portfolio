@@ -736,7 +736,7 @@ export default function HomePage() {
           <div className="sec-head">
             <h2 className="reveal-head">
               <span className="mask">
-                <span>Selected Work</span>
+                <span>Projects</span>
               </span>
             </h2>
             <span className="count reveal">8 projects — scroll or drag to explore</span>
