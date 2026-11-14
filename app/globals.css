@@ -799,8 +799,9 @@ h1.hero-title em {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--ink-soft);
-  color: var(--bg);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
   margin-top: 0.3rem;
 }
 .modal-link svg {
