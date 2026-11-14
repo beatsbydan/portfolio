@@ -488,17 +488,18 @@ h1.hero-title em {
   letter-spacing: 0.01em;
   line-height: 1.2;
 }
-/* proof-number chips: bolder and inverted, so the metrics that actually
-   matter (throughput, accuracy, scale) read as the payoff, not just
-   another tag in the row next to the tech stack */
+/* proof-number chips: bolder than the plain tag so the metrics that
+   actually matter (throughput, accuracy, scale) read as the payoff —
+   using the muted ink-soft tone rather than a full invert, which ran
+   glaring-white in dark mode and harsh black in light mode */
 .tag-stat {
   font-size: 0.74rem;
   font-family: var(--font-display), sans-serif;
   font-weight: 500;
   padding: 0.45rem 0.9rem;
   border-radius: 4px;
-  background: var(--inv-bg);
-  color: var(--inv-ink);
+  background: var(--ink-soft);
+  color: var(--bg);
   letter-spacing: -0.005em;
   line-height: 1.2;
 }
